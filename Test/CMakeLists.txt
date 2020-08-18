@@ -15,6 +15,7 @@ include_directories(${CMAKE_SOURCE_DIR}/googletest/include)
 include_directories(${CMAKE_SOURCE_DIR}/..)
 add_executable(Test_WaterPumpController
                src/main.cpp
+               src/Test_DataTypeSize.cpp
                src/Test_IOHandler.cpp
                ../Application/IOHandler.cpp)
 

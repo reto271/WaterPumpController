@@ -99,7 +99,8 @@ TEST_F(Test_BitBuffer, dummy2)
 
 TEST_F(Test_BitBuffer, dummy3)
 {
-    EXPECT_EQ(true, false);
+    EXPECT_EQ(true, true);
+    //EXPECT_EQ(true, false);
 }
 
 

@@ -5,11 +5,17 @@
 #endif
 
 IOHandler::IOHandler()
+    : m_debArrayWritePos(0)
+    , m_pumpOn(false)
 {
-//    for(uint16_t cnt = 0; cnt < DEBOUNCE_ARRAY_SIZE; cnt++) {
-//        m_levelLowDebArray[cnt] = false;
-//        m_levelHighDebArray[cnt] = false;
-//    }
+    int val = 0;
+    for(uint16_t sigCnt = 0; sigCnt < NR_SIGNALS_TO_DEBOUNCE; sigCnt++) {
+        m_debouncedSignals[sigCnt] = 0;
+        for(uint16_t sampleCnt = 0; sampleCnt < DEBOUNCE_ARRAY_SIZE; sampleCnt++) {
+            m_debounceArray[sigCnt][sampleCnt] = val;
+            val++;
+        }
+    }
 }
 
 IOHandler::~IOHandler()

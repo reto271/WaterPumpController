@@ -14,7 +14,7 @@ public:
     bool getLevelHigh();
     void setPumpState(bool pumpOn);
 
-private:
+protected:
     bool debounceSignal(bool* pArray, uint16_t arraySize);
 
     static const uint16_t DEBOUNCE_ARRAY_SIZE = 5;

@@ -12,109 +12,123 @@ namespace
 // using ::testing::HasSubstr;
 
 
-class Test_BitBuffer : public testing::Test, public IOHandler
+class Test_IOHandler : public testing::Test, public IOHandler
 {
 protected:
     void SetUp() override
     {
-        srand(time(NULL));
+        // srand(time(NULL));
     }
 
     void TearDown() override
     {
-        // Dump Trace buffer
     }
 
-    void getRandomValueUnilimted(uint32_t& value, uint16_t& bitWidth)
+    void initializeArrayAlternating()
     {
-        // rand returns numbers 0 and RAND_MAX. -> it returns only 31 bit
-        assert(RAND_MAX == 0x7fffffff); //
-        bitWidth = (rand() % 32) + 1;
-        value = (rand() << 1) ^ rand();   // exor two rand variables, shift one
-        EXPECT_TRUE(0 < bitWidth);
-        EXPECT_TRUE(32 >= bitWidth);
-    }
-
-    void getRandomValue(uint32_t& value, uint16_t& bitWidth)
-    {
-        uint32_t unlimitedVal;
-        getRandomValueUnilimted(unlimitedVal, bitWidth);
-        uint32_t bitMask = (0x1 << bitWidth) - 1;
-        value = unlimitedVal & bitMask;
-    }
-
-    void getRandomValue(int32_t& value, uint16_t& bitWidth)
-    {
-        uint32_t u32value;
-        uint32_t bitMask = 0;
-
-        getRandomValue(u32value, bitWidth);
-        if(bitWidth == 1) {
-            bitWidth++;
+        // Initialize arrays
+        bool val = false;
+        for(uint16_t sigCnt = 0; sigCnt < NR_SIGNALS_TO_DEBOUNCE; sigCnt++) {
+            m_debouncedSignals[sigCnt] = 0;
+            for(uint16_t sampleCnt = 0; sampleCnt < DEBOUNCE_ARRAY_SIZE; sampleCnt++) {
+                m_debounceArray[sigCnt][sampleCnt] = val;
+                val = !val;
+            }
         }
-
-        // Expand sign - prepare range check for signed values, not the smartest implementation
-        //  but it shall be different from the active code.
-        for(uint32_t cnt = 0; cnt < static_cast<uint32_t>(bitWidth - 1); cnt++) {
-            bitMask |= (0x1 << cnt);
-        }
-        if(0 == (0x80000000 & u32value)) {
-            // Positive values
-            u32value &= bitMask;
-        } else {
-            // Negative values
-            u32value |= (~bitMask);
-        }
-        value = *reinterpret_cast<int32_t*>(&u32value);
     }
 
-    void testSingleUnsignedValue(uint32_t oriValue, uint8_t nrBits)
+    void initializeArraySameValus()
     {
-//        uint32_t testValue;
-//        this->appendValue(oriValue, nrBits);
-//        this->getValue(testValue, nrBits);
-//        EXPECT_EQ(oriValue, testValue);
+        bool val = false;
+        for(uint16_t sampleCnt = 0; sampleCnt < DEBOUNCE_ARRAY_SIZE; sampleCnt++) {
+            for(uint16_t sigCnt = 0; sigCnt < NR_SIGNALS_TO_DEBOUNCE; sigCnt++) {
+                m_debouncedSignals[sigCnt] = 0;
+                m_debounceArray[sigCnt][sampleCnt] = val;
+                val = !val;
+            }
+        }
     }
 
-    void testSingleSignedValue(int32_t oriValue, uint8_t nrBits)
+    void initializeArrayAllOne()
     {
-//        int32_t testValue;
-//        this->appendValue(oriValue, nrBits);
-//        this->getValue(testValue, nrBits);
-//        EXPECT_EQ(oriValue, testValue);
+        for(uint16_t sampleCnt = 0; sampleCnt < DEBOUNCE_ARRAY_SIZE; sampleCnt++) {
+            for(uint16_t sigCnt = 0; sigCnt < NR_SIGNALS_TO_DEBOUNCE; sigCnt++) {
+                m_debouncedSignals[sigCnt] = 0;
+                m_debounceArray[sigCnt][sampleCnt] = true;
+            }
+        }
     }
 
 };
 
 
-TEST_F(Test_BitBuffer, dummy1)
+TEST_F(Test_IOHandler, initializationOrder)
 {
-    EXPECT_EQ(true, true);
+    // Initialize arrays
+    initializeArrayAlternating();
+
+    // Test value as single dimension array
+    bool val = false;
+    bool* pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray);
+    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE * NR_SIGNALS_TO_DEBOUNCE; valCnt++) {
+        EXPECT_EQ(val, *pSingleDimArray);
+        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
+        pSingleDimArray++;
+        val = !val;
+    }
 }
 
-TEST_F(Test_BitBuffer, dummy2)
+TEST_F(Test_IOHandler, initializationOrder2)
 {
-    EXPECT_EQ(false, false);
+    // Initialize arrays
+    initializeArraySameValus();
+
+    bool* pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray);
+    // std::cout << "Single arr(p1): 0x" << std::hex << pSingleDimArray << std::dec << std::endl;
+    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE; valCnt++) {
+        EXPECT_EQ(false, *pSingleDimArray);
+        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
+        pSingleDimArray++;
+    }
+
+
+    pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray) + 5 * sizeof(bool);
+    // std::cout << "Single arr(p2): 0x" << std::hex << pSingleDimArray << std::dec << std::endl;
+    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE; valCnt++) {
+        EXPECT_EQ(true, *pSingleDimArray);
+        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
+        pSingleDimArray++;
+    }
 }
 
-TEST_F(Test_BitBuffer, dummy3)
+TEST_F(Test_IOHandler, debounce01)
 {
-    EXPECT_EQ(true, true);
-    //EXPECT_EQ(true, false);
+    // Initialize arrays
+    initializeArraySameValus();
+
+    this->run();
+    EXPECT_EQ(false, this->m_debouncedSignals[0]);
+    EXPECT_EQ(true, this->m_debouncedSignals[1]);
 }
 
+TEST_F(Test_IOHandler, debounce02)
+{
+    // Initialize arrays
+    initializeArrayAlternating();
 
-//TEST_F(Test_BitBuffer, clearAll32bits)
-//{
-//    uint32_t value;
-//
-//    this->appendValue(static_cast<uint32_t>(0), 32);
-//
-//    this->restartReading();
-//    this->getValue(value, 32);
-//
-//    EXPECT_EQ(0, value);
-//}
+    this->run();
+    EXPECT_EQ(false, this->m_debouncedSignals[0]);
+    EXPECT_EQ(false, this->m_debouncedSignals[1]);
+}
 
+TEST_F(Test_IOHandler, debounce03)
+{
+    // Initialize arrays
+    initializeArrayAllOne();
+
+    this->run();
+    EXPECT_EQ(true, this->m_debouncedSignals[0]);
+    EXPECT_EQ(true, this->m_debouncedSignals[1]);
+}
 
 }  // unnamed namespace

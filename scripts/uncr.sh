@@ -20,6 +20,8 @@ mv Application/*.unc-backup.md5~ tmp
 mv Core/Src/*.unc-backup~ tmp
 mv Core/Src/*.unc-backup.md5~ tmp
 
+./Test/scripts/uncr.sh
+
 # Back to the original location
 popd > /dev/null
 

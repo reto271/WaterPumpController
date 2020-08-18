@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# Exclude temp directory
+tmp/
+Debug/
+
+# Exclude global/gtag files
+GPATH
+GRTAGS
+GTAGS

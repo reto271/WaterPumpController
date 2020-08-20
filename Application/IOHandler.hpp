@@ -15,7 +15,7 @@ public:
     void setPumpState(bool pumpOn);
 
 protected:
-    bool debounceSignal(bool* pArray, uint16_t arraySize);
+    bool debounceSignal(bool* pArray, uint16_t arraySize, bool newValue);
 
     static const uint16_t DEBOUNCE_ARRAY_SIZE = 5;
     static const uint16_t NR_SIGNALS_TO_DEBOUNCE = 2;
@@ -25,6 +25,8 @@ protected:
     uint16_t m_debArrayWritePos;
 
     bool m_pumpOn;
+    bool m_levelLow;
+    bool m_levelHigh;
 };
 
 #endif // __IOHANDLER_HPP__

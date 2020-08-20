@@ -2,6 +2,8 @@
 
 #if !defined(_UNIT_TESTS_)
 #include "main.h"
+#else
+#include "../Test/src/Test_IOHandler.hpp"
 #endif
 
 IOHandler::IOHandler()
@@ -24,8 +26,12 @@ IOHandler::~IOHandler()
 
 void IOHandler::run()
 {
+    GPIO_PinState newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin);
+    m_levelLow = debounceSignal(&m_debounceArray[0][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
 
-//    debounceValue(m_levelLowDebArray, newValue);
+    newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin);
+    m_levelHigh = debounceSignal(&m_debounceArray[1][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
+
 //    debounceValue(m_levelHighDebArray, newValue);
 //
 //
@@ -38,14 +44,12 @@ void IOHandler::run()
 
 bool IOHandler::getLevelLow()
 {
-//    return m_levelLow;
-    return false;
+    return m_levelLow;
 }
 
 bool IOHandler::getLevelHigh()
 {
-//    return m_levelHigh;
-    return false;
+    return m_levelHigh;
 }
 
 void IOHandler::setPumpState(bool pumpOn)
@@ -62,8 +66,10 @@ void IOHandler::setPumpState(bool pumpOn)
     }
 }
 
-bool IOHandler::debounceSignal(bool* pArray, uint16_t arraySize)
+bool IOHandler::debounceSignal(bool* pArray, uint16_t arraySize, bool newValue)
 {
+    // No debouncing implemented yet 
+    return newValue;
 }
 
 #if 0

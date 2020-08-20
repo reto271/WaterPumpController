@@ -68,7 +68,7 @@ void IOHandler::setPumpState(bool pumpOn)
 
 bool IOHandler::debounceSignal(bool* pArray, uint16_t arraySize, bool newValue)
 {
-    // No debouncing implemented yet 
+    // No debouncing implemented yet
     return newValue;
 }
 

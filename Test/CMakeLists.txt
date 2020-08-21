@@ -17,6 +17,8 @@ add_executable(Test_WaterPumpController
                src/main.cpp
                src/Test_DataTypeSize.cpp
                src/Test_IOHandler.cpp
-               ../Application/IOHandler.cpp)
+               src/Test_PumpController.cpp
+               ../Application/IOHandler.cpp
+               ../Application/PumpController.cpp)
 
 target_link_libraries(Test_WaterPumpController gtest_main gtest gmock)

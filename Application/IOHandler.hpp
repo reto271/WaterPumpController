@@ -1,18 +1,19 @@
-#ifndef __IOHANDLER_HPP__
-#define __IOHANDLER_HPP__
+#pragma once
 
 #include <stdint.h>
+#include "IIOHandler.hpp"
 
-class IOHandler {
+
+class IOHandler : public IIOHandler {
 public:
     IOHandler();
     virtual ~IOHandler();
 
-    void run();
+    void run() override;
 
-    bool getLevelLow();
-    bool getLevelHigh();
-    void setPumpState(bool pumpOn);
+    bool getLevelLow() override;
+    bool getLevelHigh() override;
+    void setPumpState(bool pumpOn) override;
 
 protected:
     bool debounceSignal(bool* pArray, uint16_t arraySize, bool newValue);
@@ -28,5 +29,3 @@ protected:
     bool m_levelLow;
     bool m_levelHigh;
 };
-
-#endif // __IOHANDLER_HPP__

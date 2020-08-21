@@ -1,12 +1,23 @@
-#ifndef __PUMPCONTROLLER_HPP__
-#define __PUMPCONTROLLER_HPP__
+#pragma once
+
+class IIOHandler;
 
 class PumpController {
 public:
-    PumpController();
+    PumpController(IIOHandler* pIOHandler);
     virtual ~PumpController();
 
     void run();
-};
 
-#endif // __PUMPCONTROLLER_HPP__
+private:
+    enum class PumpState {
+        On,
+        Off,
+        OffByTimeout
+    };
+
+    PumpController();
+
+    IIOHandler* m_pIOHandler;
+    PumpState m_pumpState;
+};

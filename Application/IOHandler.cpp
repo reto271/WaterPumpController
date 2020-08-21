@@ -31,15 +31,6 @@ void IOHandler::run()
 
     newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin);
     m_levelHigh = debounceSignal(&m_debounceArray[1][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
-
-//    debounceValue(m_levelHighDebArray, newValue);
-//
-//
-//    // Next writePos
-//    m_debArrayWritePos++;
-//    if(DEBOUNCE_ARRAY_SIZE <= m_debArrayWritePos) {
-//        m_debArrayWritePos = 0;
-//    }
 }
 
 bool IOHandler::getLevelLow()
@@ -69,19 +60,10 @@ void IOHandler::setPumpState(bool pumpOn)
 bool IOHandler::debounceSignal(bool* pArray, uint16_t arraySize, bool newValue)
 {
     // No debouncing implemented yet
+//    // Next writePos
+//    m_debArrayWritePos++;
+//    if(DEBOUNCE_ARRAY_SIZE <= m_debArrayWritePos) {
+//        m_debArrayWritePos = 0;
+//    }
     return newValue;
 }
-
-#if 0
-GPIO_PIN_RESET = 0U,
-GPIO_PIN_SET
-
-#define LEVEL_1_IN_Pin GPIO_PIN_0
-#define LEVEL_1_IN_GPIO_Port GPIOA
-#define LEVEL_2_IN_Pin GPIO_PIN_1
-#define LEVEL_2_IN_GPIO_Port GPIOA
-#define PUMP_OUT_Pin GPIO_PIN_2
-#define PUMP_OUT_GPIO_Port GPIOA
-#define LED_OUT_Pin GPIO_PIN_4
-#define LED_OUT_GPIO_Port GPIOA
-#endif

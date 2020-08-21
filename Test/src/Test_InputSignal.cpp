@@ -1,28 +1,41 @@
-// #include "Test_InputSignal.hpp"
-
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <stdint.h>
 
 #include "Application/InputSignal.hpp"
 
-GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
-{
-    return GPIO_PIN_RESET;
-}
+GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
 
-namespace
-{
-// using ::testing::StrictMock;
-// using ::testing::Return;
+
+using ::testing::StrictMock;
+using ::testing::Return;
 // using ::testing::Exactly;
-// using ::testing::_;
+using ::testing::_;
 // using ::testing::HasSubstr;
 
+class Mock_HAL_GPIO
+{
+public:
+    virtual ~Mock_HAL_GPIO()
+    {
+    }
 
+    MOCK_METHOD(GPIO_PinState, HAL_GPIO_ReadPin_xxx, (GPIO_TypeDef*, uint16_t));
+};
 
 class Test_InputSignal : public testing::Test
 {
 protected:
+    Test_InputSignal()
+    {
+        m_gpioMock.reset(new StrictMock<Mock_HAL_GPIO>());
+    }
+
+    virtual ~Test_InputSignal()
+    {
+        m_gpioMock.reset();
+    }
+
     void SetUp() override
     {
         // srand(time(NULL));
@@ -32,82 +45,155 @@ protected:
     {
     }
 
+    std::shared_ptr<InputSignal> m_input;
+
+public:
+    static std::unique_ptr<StrictMock<Mock_HAL_GPIO> > m_gpioMock;
 };
 
+std::unique_ptr<StrictMock<Mock_HAL_GPIO> > Test_InputSignal::m_gpioMock;
 
-
-
-TEST_F(Test_InputSignal, initializationOrder)
+GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 {
-    EXPECT_TRUE(true);
+    return Test_InputSignal::m_gpioMock->HAL_GPIO_ReadPin_xxx(GPIOx, GPIO_Pin);
 }
-// TEST_F(Test_InputSignal, initializationOrder)
-// {
-//    // Initialize arrays
-//    initializeArrayAlternating();
-//
-//    // Test value as single dimension array
-//    bool val = false;
-//    bool* pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray);
-//    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE * NR_SIGNALS_TO_DEBOUNCE; valCnt++) {
-//        EXPECT_EQ(val, *pSingleDimArray);
-//        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
-//        pSingleDimArray++;
-//        val = !val;
-//    }
-// }
-//
-// TEST_F(Test_InputSignal, initializationOrder2)
-// {
-//    // Initialize arrays
-//    initializeArraySameValus();
-//
-//    bool* pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray);
-//    // std::cout << "Single arr(p1): 0x" << std::hex << pSingleDimArray << std::dec << std::endl;
-//    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE; valCnt++) {
-//        EXPECT_EQ(false, *pSingleDimArray);
-//        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
-//        pSingleDimArray++;
-//    }
-//
-//
-//    pSingleDimArray = reinterpret_cast<bool*>(m_debounceArray) + 5 * sizeof(bool);
-//    // std::cout << "Single arr(p2): 0x" << std::hex << pSingleDimArray << std::dec << std::endl;
-//    for(uint16_t valCnt = 0; valCnt < DEBOUNCE_ARRAY_SIZE; valCnt++) {
-//        EXPECT_EQ(true, *pSingleDimArray);
-//        // std::cout << "Array value: " << *pSingleDimArray << ", @ " << pSingleDimArray << std::endl;
-//        pSingleDimArray++;
-//    }
-// }
-//
-// TEST_F(Test_InputSignal, debounce01)
-// {
-//    // Initialize arrays
-//    initializeArraySameValus();
-//
-//    this->run();
-//    EXPECT_EQ(false, this->m_debouncedSignals[0]);
-//    EXPECT_EQ(true, this->m_debouncedSignals[1]);
-// }
-//
-// TEST_F(Test_InputSignal, debounce02)
-// {
-//    // Initialize arrays
-//    initializeArrayAlternating();
-//
-//    this->run();
-//    EXPECT_EQ(false, this->m_debouncedSignals[0]);
-//    EXPECT_EQ(false, this->m_debouncedSignals[1]);
-// }
-//
-// TEST_F(Test_InputSignal, debounce03)
-// {
-//    // Initialize arrays
-//    initializeArrayAllOne();
-//
-//    this->run();
-//    EXPECT_EQ(true, this->m_debouncedSignals[0]);
-//    EXPECT_EQ(true, this->m_debouncedSignals[1]);
-// }
 
-}  // unnamed namespace
+TEST_F(Test_InputSignal, initializationFalseNoninverting)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, false, false);
+    EXPECT_FALSE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initializationTrueNoninverting)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, true, false);
+    EXPECT_TRUE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initializationFalseInverting)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, false, true);
+    EXPECT_FALSE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initializationTrueInverting)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, true, true);
+    EXPECT_TRUE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initFalseNoninverting_transient)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, false, false);
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(nullptr, 0)).Times(5).WillRepeatedly(Return(GPIO_PIN_RESET));
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(nullptr, 0)).Times(5).WillRepeatedly(Return(GPIO_PIN_SET));
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initTrueNoninverting_transient)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, true, false);
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_SET));
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_RESET));
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initFalseInverting_transient)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, false, true);
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_SET));
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_RESET));
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+}
+
+TEST_F(Test_InputSignal, initTrueInverting_transient)
+{
+    m_input = std::make_shared<InputSignal>(nullptr, 0, true, true);
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_RESET));
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+
+    EXPECT_CALL(*m_gpioMock, HAL_GPIO_ReadPin_xxx(_, _)).Times(5).WillRepeatedly(Return(GPIO_PIN_SET));
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_TRUE(m_input->getState());
+    m_input->sampleInput();
+    EXPECT_FALSE(m_input->getState());
+}

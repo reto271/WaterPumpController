@@ -12,7 +12,7 @@ namespace
 // using ::testing::HasSubstr;
 
 
-class Test_DataTypeSize : public testing::Test, public IOHandler
+class Test_DataTypeSize : public testing::Test
 {
 protected:
     void SetUp() override

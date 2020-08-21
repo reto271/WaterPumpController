@@ -1,5 +1,5 @@
 #include "InputSignal.hpp"
-
+#include <iostream>
 
 InputSignal::InputSignal(GPIO_TypeDef* port, uint16_t pin, bool logicalInitVal, bool isInverting)
     : m_port(port)
@@ -15,6 +15,7 @@ InputSignal::InputSignal(GPIO_TypeDef* port, uint16_t pin, bool logicalInitVal, 
     } else {
         m_isInverting = GPIO_PIN_SET;
     }
+    printState("Constructor");
 }
 
 InputSignal::~InputSignal()
@@ -33,18 +34,34 @@ void InputSignal::sampleInput()
     }
     m_debounceArray[m_debArrayWritePos] = logicalSample;
 
-    bool doChange = true;
+    uint16_t doChangeCnt = 0;
     for(uint16_t cnt = 0; cnt < DEBOUNCE_ARRAY_SIZE; cnt++) {
-        if(m_debounceArray[m_debArrayWritePos] == m_state) {
-            doChange = false;
+        if(m_debounceArray[cnt] != m_state) {
+            doChangeCnt++;
         }
     }
-    if(true == doChange) {
+    if(5 <= doChangeCnt) {
         m_state = !m_state;
     }
+    printState("sampleInput");
 }
 
 bool InputSignal::getState()
 {
     return m_state;
+}
+
+void InputSignal::printState(std::string title)
+{
+    #if 0
+    std::cout << "---" << title << "--------------------" << std::endl;
+    std::cout << "arr: ";
+    for(uint16_t cnt = 0; cnt < DEBOUNCE_ARRAY_SIZE; cnt++) {
+        std::cout << m_debounceArray[cnt] << ", ";
+    }
+    std::cout << std::endl;
+    std::cout << "state: " << m_state << std::endl;
+    std::cout << "inverting: " << !m_isInverting << std::endl;
+    std::cout << "---" << title << "--------------------" << std::endl;
+    #endif
 }

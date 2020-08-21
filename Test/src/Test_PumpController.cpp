@@ -29,6 +29,10 @@ virtual void setPumpState(bool pumpOn) = 0;
 class MockIOHandler : public IIOHandler
 {
 public:
+    virtual ~MockIOHandler()
+    {
+    }
+
     MOCK_METHOD(void, run, (), (override));
     MOCK_METHOD(bool, getLevelLow, (), (override));
     MOCK_METHOD(bool, getLevelHigh, (), (override));

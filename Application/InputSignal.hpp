@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
+
 #include "IInputSignal.hpp"
 
 
@@ -23,6 +25,7 @@ public:
 
 protected:
     InputSignal();
+    void printState(std::string title);
 
     static const uint16_t DEBOUNCE_ARRAY_SIZE = 5;
 

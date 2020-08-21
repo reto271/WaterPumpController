@@ -1,23 +1,16 @@
 #include "IOHandler.hpp"
 
-#if !defined(_UNIT_TESTS_)
-#include "main.h"
-#else
-#include "../Test/src/Test_IOHandler.hpp"
-#endif
+// #if !defined(_UNIT_TESTS_)
+// #include "main.h"
+// #else
+// #include "../Test/src/Test_IOHandler.hpp"
+// #endif
 
 IOHandler::IOHandler()
-    : m_debArrayWritePos(0)
-    , m_pumpOn(false)
+//    InputSignal(GPIO_TypeDef* port, uint16_t pin, bool logicalInitVal, bool isInverting);
+    : m_levelLow(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin, false, false)
+    , m_levelHigh(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin, false, false)
 {
-    int val = 0;
-    for(uint16_t sigCnt = 0; sigCnt < NR_SIGNALS_TO_DEBOUNCE; sigCnt++) {
-        m_debouncedSignals[sigCnt] = 0;
-        for(uint16_t sampleCnt = 0; sampleCnt < DEBOUNCE_ARRAY_SIZE; sampleCnt++) {
-            m_debounceArray[sigCnt][sampleCnt] = val;
-            val++;
-        }
-    }
 }
 
 IOHandler::~IOHandler()
@@ -26,44 +19,33 @@ IOHandler::~IOHandler()
 
 void IOHandler::run()
 {
-    GPIO_PinState newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin);
-    m_levelLow = debounceSignal(&m_debounceArray[0][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
-
-    newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin);
-    m_levelHigh = debounceSignal(&m_debounceArray[1][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
+//    GPIO_PinState newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin);
+//    m_levelLow = debounceSignal(&m_debounceArray[0][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
+//
+//    newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin);
+//    m_levelHigh = debounceSignal(&m_debounceArray[1][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
 }
 
 bool IOHandler::getLevelLow()
 {
-    return m_levelLow;
+    return m_levelLow.getState();
 }
 
 bool IOHandler::getLevelHigh()
 {
-    return m_levelHigh;
+    return m_levelHigh.getState();
 }
 
 void IOHandler::setPumpState(bool pumpOn)
 {
-    m_pumpOn = pumpOn;
-    if(true == m_pumpOn) {
-#if !defined(_UNIT_TESTS_)
-        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_SET);
-#endif
-    } else {
-#if !defined(_UNIT_TESTS_)
-        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
-#endif
-    }
-}
-
-bool IOHandler::debounceSignal(bool* pArray, uint16_t arraySize, bool newValue)
-{
-    // No debouncing implemented yet
-//    // Next writePos
-//    m_debArrayWritePos++;
-//    if(DEBOUNCE_ARRAY_SIZE <= m_debArrayWritePos) {
-//        m_debArrayWritePos = 0;
+//    m_pumpOn = pumpOn;
+//    if(true == m_pumpOn) {
+// #if !defined(_UNIT_TESTS_)
+//        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_SET);
+// #endif
+//    } else {
+// #if !defined(_UNIT_TESTS_)
+//        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
+// #endif
 //    }
-    return newValue;
 }

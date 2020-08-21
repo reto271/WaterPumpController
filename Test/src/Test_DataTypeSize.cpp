@@ -28,8 +28,6 @@ protected:
 
 TEST_F(Test_DataTypeSize, trivialTypes)
 {
-    bool val = false;
-
     EXPECT_EQ(1, sizeof(bool));
 
     EXPECT_EQ(1, sizeof(char));
@@ -53,10 +51,10 @@ TEST_F(Test_DataTypeSize, trivialTypes)
     EXPECT_EQ(8, sizeof(uint64_t));
 }
 
-TEST_F(Test_DataTypeSize, customTypes)
-{
-    EXPECT_EQ(2, sizeof(m_debouncedSignals));
-    EXPECT_EQ(10, sizeof(m_debounceArray));
-}
+// TEST_F(Test_DataTypeSize, customTypes)
+// {
+//    EXPECT_EQ(2, sizeof(m_debouncedSignals));
+//    EXPECT_EQ(10, sizeof(m_debounceArray));
+// }
 
 }  // unnamed namespace

@@ -16,8 +16,10 @@ include_directories(${CMAKE_SOURCE_DIR}/..)
 add_executable(Test_WaterPumpController
                src/main.cpp
                src/Test_DataTypeSize.cpp
+               src/Test_InputSignal.cpp
                src/Test_IOHandler.cpp
                src/Test_PumpController.cpp
+               ../Application/InputSignal.cpp
                ../Application/IOHandler.cpp
                ../Application/PumpController.cpp)
 

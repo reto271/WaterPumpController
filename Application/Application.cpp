@@ -28,7 +28,6 @@ void ApplicationTimerInterrupt10ms()
 
 void runBackgroudLoop()
 {
-
     if(true == pTimerMgr->is10ms()) {
         pTimerMgr->confirm10ms();
         pIoHandler->run();

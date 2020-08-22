@@ -1,5 +1,8 @@
 #include "InputSignal.hpp"
+
+#if defined (_UNIT_TESTS_)
 #include <iostream>
+#endif
 
 InputSignal::InputSignal(GPIO_TypeDef* port, uint16_t pin, bool logicalInitVal, bool isInverting)
     : m_port(port)
@@ -53,6 +56,7 @@ bool InputSignal::getState()
 
 void InputSignal::printState(std::string title)
 {
+#if defined (_UNIT_TESTS_)
     #if 0
     std::cout << "---" << title << "--------------------" << std::endl;
     std::cout << "arr: ";
@@ -64,4 +68,5 @@ void InputSignal::printState(std::string title)
     std::cout << "inverting: " << !m_isInverting << std::endl;
     std::cout << "---" << title << "--------------------" << std::endl;
     #endif
+#endif  // _UNIT_TESTS_
 }

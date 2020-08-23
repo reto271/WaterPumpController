@@ -1,30 +1,23 @@
-#ifndef __IOHANDLER_HPP__
-#define __IOHANDLER_HPP__
+#pragma once
 
 #include <stdint.h>
+#include "IIOHandler.hpp"
+#include "InputSignal.hpp"
 
-class IOHandler {
+class IOHandler : public IIOHandler
+{
 public:
     IOHandler();
     virtual ~IOHandler();
 
-    void run();
+    void run() override;
 
-    bool getLevelLow();
-    bool getLevelHigh();
-    void setPumpState(bool pumpOn);
+    bool getLevelLow() override;
+    bool getLevelHigh() override;
+    void setPumpState(bool pumpOn) override;
+    void setLED_State(bool LED_On) override;
 
 protected:
-    bool debounceSignal(bool* pArray, uint16_t arraySize);
-
-    static const uint16_t DEBOUNCE_ARRAY_SIZE = 5;
-    static const uint16_t NR_SIGNALS_TO_DEBOUNCE = 2;
-
-    bool m_debouncedSignals[NR_SIGNALS_TO_DEBOUNCE];
-    bool m_debounceArray[NR_SIGNALS_TO_DEBOUNCE][DEBOUNCE_ARRAY_SIZE];
-    uint16_t m_debArrayWritePos;
-
-    bool m_pumpOn;
+    InputSignal m_levelLow;
+    InputSignal m_levelHigh;
 };
-
-#endif // __IOHANDLER_HPP__

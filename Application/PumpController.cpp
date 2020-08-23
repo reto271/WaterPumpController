@@ -21,16 +21,5 @@ void PumpController::run()
         m_pumpState = PumpState::On;
     }
     m_pIOHandler->setPumpState(PumpState::On == m_pumpState);
+    m_pIOHandler->setLED_State(PumpState::On == m_pumpState);
 }
-
-#if 0
-
-On,
-Off,
-OffByTimeout
-}
-PumpController();
-
-IIOHandler* m_pIOHandler;
-PumpState m_pumpState;
-#endif

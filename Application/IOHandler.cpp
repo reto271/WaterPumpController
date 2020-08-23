@@ -7,7 +7,6 @@
 // #endif
 
 IOHandler::IOHandler()
-//    InputSignal(GPIO_TypeDef* port, uint16_t pin, bool logicalInitVal, bool isInverting);
     : m_levelLow(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin, false, false)
     , m_levelHigh(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin, false, false)
 {
@@ -19,11 +18,8 @@ IOHandler::~IOHandler()
 
 void IOHandler::run()
 {
-//    GPIO_PinState newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin);
-//    m_levelLow = debounceSignal(&m_debounceArray[0][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
-//
-//    newValue = HAL_GPIO_ReadPin(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin);
-//    m_levelHigh = debounceSignal(&m_debounceArray[1][0], DEBOUNCE_ARRAY_SIZE, (GPIO_PIN_SET == newValue));
+    m_levelLow.sampleInput();
+    m_levelHigh.sampleInput();
 }
 
 bool IOHandler::getLevelLow()
@@ -38,14 +34,23 @@ bool IOHandler::getLevelHigh()
 
 void IOHandler::setPumpState(bool pumpOn)
 {
-//    m_pumpOn = pumpOn;
-//    if(true == m_pumpOn) {
-// #if !defined(_UNIT_TESTS_)
-//        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_SET);
-// #endif
-//    } else {
-// #if !defined(_UNIT_TESTS_)
-//        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
-// #endif
-//    }
+#if !defined(_UNIT_TESTS_)
+    if(true == pumpOn) {
+        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_SET);
+    } else {
+        HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
+    }
+ #endif
+}
+
+void IOHandler::setLED_State(bool LED_On)
+{
+#if !defined(_UNIT_TESTS_)
+    if(true == LED_On) {
+        // LED output is inverting
+        HAL_GPIO_WritePin(LED_OUT_GPIO_Port, LED_OUT_Pin, GPIO_PIN_RESET);
+    } else {
+        HAL_GPIO_WritePin(LED_OUT_GPIO_Port, LED_OUT_Pin, GPIO_PIN_SET);
+    }
+ #endif
 }

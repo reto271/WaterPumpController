@@ -9,12 +9,11 @@ TimerMgr::TimerMgr()
 
 TimerMgr::~TimerMgr()
 {
-
 }
 
 void TimerMgr::timerISR()
 {
-    // Check that the previous intervall was properly handled.
+    // Check that the previous interval was properly handled.
 //    assert(false === m_exe10msInvervall);
     m_exe10msInvervall = true;
     if(10 <= m_periodCounter) {

@@ -1,36 +1,35 @@
-// #include <gtest/gtest.h>
-// #include <stdint.h>
-//
-// #include "Application/IOHandler.hpp"
-//
+#include <gtest/gtest.h>
+#include <stdint.h>
+
+#include "Application/IOHandler.hpp"
+
 // GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
 // {
 //     return GPIO_PIN_RESET;
 // }
-//
-// namespace
-// {
-// // using ::testing::StrictMock;
-// // using ::testing::Return;
-// // using ::testing::Exactly;
-// // using ::testing::_;
-// // using ::testing::HasSubstr;
-//
-//
-//
-// class Test_IOHandler : public testing::Test, public IOHandler
-// {
-// protected:
-//     void SetUp() override
-//     {
-//         // srand(time(NULL));
-//     }
-//
-//     void TearDown() override
-//     {
-//     }
-//
-//     void initializeArrayAlternating()
+
+namespace
+{
+// using ::testing::StrictMock;
+// using ::testing::Return;
+// using ::testing::Exactly;
+// using ::testing::_;
+// using ::testing::HasSubstr;
+
+
+class Test_IOHandler : public testing::Test, public IOHandler
+{
+protected:
+    void SetUp() override
+    {
+        // srand(time(NULL));
+    }
+
+    void TearDown() override
+    {
+    }
+
+//    void initializeArrayAlternating()
 //     {
 //         // Initialize arrays
 //         bool val = false;
@@ -65,10 +64,14 @@
 //         }
 //     }
 //
-// };
-//
-//
-//
+};
+
+
+TEST_F(Test_IOHandler, instance)
+{
+    IOHandler ioHdl;
+}
+
 // TEST_F(Test_IOHandler, initializationOrder)
 // {
 //     // Initialize arrays
@@ -137,6 +140,5 @@
 //     EXPECT_EQ(true, this->m_debouncedSignals[0]);
 //     EXPECT_EQ(true, this->m_debouncedSignals[1]);
 // }
-//
-// }  // unnamed namespace
-//
+
+}   // unnamed namespace

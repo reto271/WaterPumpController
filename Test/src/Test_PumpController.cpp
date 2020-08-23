@@ -37,6 +37,7 @@ public:
     MOCK_METHOD(bool, getLevelLow, (), (override));
     MOCK_METHOD(bool, getLevelHigh, (), (override));
     MOCK_METHOD(void, setPumpState, (bool), (override));
+    MOCK_METHOD(void, setLED_State, (bool), (override));
 };
 
 class Test_PumpController : public testing::Test // , public PumpController
@@ -63,6 +64,7 @@ TEST_F(Test_PumpController, expectOff)
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, setPumpState(false)).Times(1);
+    EXPECT_CALL(mockIOHdl, setLED_State(false)).Times(1);
     m_pPumpCtrl->run();
     EXPECT_EQ(true, true);
 }
@@ -72,6 +74,7 @@ TEST_F(Test_PumpController, stillOff)
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(true));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, setPumpState(false)).Times(1);
+    EXPECT_CALL(mockIOHdl, setLED_State(false)).Times(1);
     m_pPumpCtrl->run();
     EXPECT_EQ(true, true);
 }
@@ -81,9 +84,9 @@ TEST_F(Test_PumpController, pumpOn)
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(true));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(1).WillRepeatedly(Return(true));
     EXPECT_CALL(mockIOHdl, setPumpState(true)).Times(1);
+    EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(1);
     m_pPumpCtrl->run();
     EXPECT_EQ(true, true);
 }
-
 
 }  // unnamed namespace

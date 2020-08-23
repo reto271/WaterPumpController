@@ -15,11 +15,9 @@ public:
     bool getLevelLow() override;
     bool getLevelHigh() override;
     void setPumpState(bool pumpOn) override;
+    void setLED_State(bool LED_On) override;
 
 protected:
-    // bool debounceSignal(bool* pArray, uint16_t arraySize, bool newValue);
-
-    bool m_pumpOn;
     InputSignal m_levelLow;
     InputSignal m_levelHigh;
 };

@@ -31,10 +31,11 @@
 *.out
 *.app
 
-# Exclude temp directory
+# Exclude temp and binary directories
 tmp/
 Debug/
 Test/googletest
+Test/bin
 
 # Exclude global/gtag files
 GPATH

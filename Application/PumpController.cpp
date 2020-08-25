@@ -14,7 +14,6 @@ PumpController::~PumpController()
 
 void PumpController::run()
 {
-    int dummy = 0;
     if(false == m_pIOHandler->getLevelLow()) {
         m_pumpState = PumpState::Off;
     }

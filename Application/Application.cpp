@@ -16,7 +16,7 @@ void initializeBackgroundLoop()
 {
     pTimerMgr = new TimerMgr();
     pIoHandler = new IOHandler();
-    pPumpCtrl = new PumpController(pIoHandler);
+    pPumpCtrl = new PumpController(pIoHandler, pTimerMgr);
 }
 
 void ApplicationTimerInterrupt10ms()

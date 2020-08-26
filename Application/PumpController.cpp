@@ -76,7 +76,7 @@ void PumpController::state_Off()
 
 void PumpController::state_OffTimeout()
 {
-    if(m_timerId == m_pTimerMgr->isTimerExpired(m_timerId)) {
+    if(true == m_pTimerMgr->isTimerExpired(m_timerId)) {
         m_timerId = ITimerMgr::INVALID_TIMER_ID;
         onEnterState_Off();
     }

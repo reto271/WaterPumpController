@@ -3,22 +3,24 @@
 
 #include <stdint.h>
 
-class TimerMgr {
+#include "ITimerMgr.hpp"
+
+class TimerMgr : public ITimerMgr {
 public:
     TimerMgr();
     virtual ~TimerMgr();
 
-    void timerISR();
+    void timerISR() override;
 
-    bool is10ms();
-    void confirm10ms();
+    bool is10ms() override;
+    void confirm10ms() override;
 
-    bool is100ms();
-    void confirm100ms();
+    bool is100ms() override;
+    void confirm100ms() override;
 
-    uint32_t createTimer(const uint32_t timeoutInSec);
-    void cancelTimer(const uint32_t timerId);
-    bool isTimerExpired(const uint32_t timerId);
+    uint32_t createTimer(const uint32_t timeoutInSec) override;
+    void cancelTimer(const uint32_t timerId) override;
+    bool isTimerExpired(const uint32_t timerId) override;
 
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 

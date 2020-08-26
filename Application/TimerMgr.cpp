@@ -98,6 +98,9 @@ void TimerMgr::cancelTimer(const uint32_t timerId)
 
 bool TimerMgr::isTimerExpired(const uint32_t timerId)
 {
+    if(INVALID_TIMER_ID == timerId) {
+        return false;
+    }
     for(uint32_t cnt = 0; cnt < MAX_CURRENT_ACTIVE_TIMERS; cnt++) {
         if((timerId == m_activeTimer[cnt].timerId) && (m_activeTimer[cnt].timeItExpires <= m_currentTime)) {
             cancelTimer(timerId);

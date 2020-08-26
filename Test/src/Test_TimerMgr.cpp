@@ -292,4 +292,11 @@ TEST_F(Test_TimerMgr, reuseOfTimers)
     EXPECT_EQ(INVALID_TIMER_ID, this->createTimer(1));
 }
 
+TEST_F(Test_TimerMgr, isTimerExpiredNonExistingId)
+{
+    EXPECT_FALSE(this->isTimerExpired(0));
+    EXPECT_FALSE(this->isTimerExpired(1234));
+    EXPECT_FALSE(this->isTimerExpired(TimerMgr::INVALID_TIMER_ID));
+}
+
 }  // unnamed namespace

@@ -133,8 +133,8 @@ TEST_F(Test_PumpController, switchOnLaterOffByLevel)
     m_pPumpCtrl->run();
 
     // Upper level signal no longer true
-    EXPECT_CALL(mockIOHdl, getLevelLow()).Times(5).WillRepeatedly(Return(false));
-    EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(5)).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockIOHdl, getLevelLow()).Times(5).WillRepeatedly(Return(true));
+    EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(5)).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, setPumpState(true)).Times(5);
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(5);
     EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(5).WillRepeatedly(Return(false));

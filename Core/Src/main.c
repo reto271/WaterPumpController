@@ -77,7 +77,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 int main(void)
 {
     /* USER CODE BEGIN 1 */
-
     /* USER CODE END 1 */
 
     /* MCU Configuration--------------------------------------------------------*/
@@ -93,14 +92,19 @@ int main(void)
     SystemClock_Config();
 
     /* USER CODE BEGIN SysInit */
-
     /* USER CODE END SysInit */
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_USART1_UART_Init();
     MX_TIM14_Init();
+
     /* USER CODE BEGIN 2 */
+    // Switch off pump & LED as soon as possible
+    HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LED_OUT_GPIO_Port, LED_OUT_Pin, GPIO_PIN_SET);
+
+    // Initialize BGL
     initializeBackgroundLoop();
     HAL_TIM_Base_Start_IT(&htim14);
     /* USER CODE END 2 */

@@ -8,10 +8,10 @@
 
 
 /// Time defined in PumpController.hpp
-const uint32_t TEST_MAX_PUMP_RUN_TIME = 120;
+const uint32_t TEST_MAX_PUMP_RUN_TIME = 10 * 60;
 
 /// Time defined in PumpController.hpp
-const uint32_t TEST_MIN_PUMP_IDLE_TIME = 3600;
+const uint32_t TEST_MIN_PUMP_IDLE_TIME = 24 * 3600;
 
 namespace
 {

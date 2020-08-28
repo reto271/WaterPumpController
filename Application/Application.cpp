@@ -12,9 +12,9 @@ static IOHandler* pIoHandler = NULL;
 static PumpController* pPumpCtrl = NULL;
 
 
-void initializeBackgroundLoop()
+void initializeBackgroundLoop(UART_HandleTypeDef* huart1)
 {
-    pTimerMgr = new TimerMgr();
+    pTimerMgr = new TimerMgr(huart1);
     pIoHandler = new IOHandler();
     pPumpCtrl = new PumpController(pIoHandler, pTimerMgr);
 }

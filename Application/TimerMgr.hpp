@@ -1,13 +1,14 @@
 #ifndef __TIMERMGR_HPP__
 #define __TIMERMGR_HPP__
 
+#include <stm32f0xx_hal.h>
 #include <stdint.h>
 
 #include "ITimerMgr.hpp"
 
 class TimerMgr : public ITimerMgr {
 public:
-    TimerMgr();
+    TimerMgr(UART_HandleTypeDef* huart1);
     virtual ~TimerMgr();
 
     void timerISR() override;
@@ -47,6 +48,7 @@ private:
     uint32_t m_nextFreeTimerId;
     TimerData m_activeTimer[MAX_CURRENT_ACTIVE_TIMERS];
 
+    UART_HandleTypeDef* m_pUART;
 };
 
 #endif // __TIMERMGR_HPP__

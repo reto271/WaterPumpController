@@ -1,4 +1,7 @@
 #include "TimerMgr.hpp"
+
+#include <stdio.h>
+
 #if defined(_UNIT_TESTS_)
 #include <iostream>
 #endif
@@ -11,13 +14,14 @@
 
 const uint32_t TimerMgr::INVALID_TIMER_ID;  // Initialized in the header, necessary for the linker
 
-TimerMgr::TimerMgr()
+TimerMgr::TimerMgr(UART_HandleTypeDef* huart1)
     : m_exe10msInvervall(false)
     , m_exe100msInvervall(false)
     , m_periodCounter10ms(1)
     , m_periodCounter100ms(1)
     , m_currentTime(0)
     , m_nextFreeTimerId(0)
+, m_pUART(huart1)
 {
     for(uint32_t cnt = 0; cnt < MAX_CURRENT_ACTIVE_TIMERS; cnt++) {
         m_activeTimer[cnt].timerId = INVALID_TIMER_ID;
@@ -41,6 +45,13 @@ void TimerMgr::timerISR()
         if(10 <= m_periodCounter100ms) {
             m_periodCounter100ms = 0;
             m_currentTime++;
+
+            if ((0x3 & m_currentTime) == 0) {
+            	uint8_t value = 'a';
+                printf("a");
+                HAL_UART_Transmit(m_pUART, &value, 1, 100);
+                //HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+            }
         }
         m_periodCounter100ms++;
     }

@@ -101,7 +101,7 @@ int main(void)
     MX_USART1_UART_Init();
     MX_TIM14_Init();
     /* USER CODE BEGIN 2 */
-    initializeBackgroundLoop();
+    initializeBackgroundLoop(&huart1);
     HAL_TIM_Base_Start_IT(&htim14);
     /* USER CODE END 2 */
 

@@ -16,5 +16,7 @@ public:
     virtual void cancelTimer(const uint32_t timerId) = 0;
     virtual bool isTimerExpired(const uint32_t timerId) = 0;
 
+    virtual uint32_t getCurrentTime() = 0;
+
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 };

@@ -22,11 +22,12 @@ public:
     void cancelTimer(const uint32_t timerId) override;
     bool isTimerExpired(const uint32_t timerId) override;
 
+    uint32_t getCurrentTime() override;
+
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 
 protected:
     void incrementTimerId();
-    uint32_t getCurrentTime();
     bool freePositionInArray(uint32_t& freePos);
 
 private:

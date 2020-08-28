@@ -110,17 +110,17 @@ bool TimerMgr::isTimerExpired(const uint32_t timerId)
     return false;
 }
 
+uint32_t TimerMgr::getCurrentTime()
+{
+    return m_currentTime;
+}
+
 void TimerMgr::incrementTimerId()
 {
     m_nextFreeTimerId++;
     if(INVALID_TIMER_ID == m_nextFreeTimerId) {
         m_nextFreeTimerId++;
     }
-}
-
-uint32_t TimerMgr::getCurrentTime()
-{
-    return m_currentTime;
 }
 
 bool TimerMgr::freePositionInArray(uint32_t& freePos)

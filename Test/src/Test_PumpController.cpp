@@ -66,6 +66,8 @@ public:
     MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
     MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));
     MOCK_METHOD(bool, isTimerExpired, (const uint32_t), (override));
+
+    MOCK_METHOD(uint32_t, getCurrentTime, (), (override));
 };
 
 class Test_PumpController : public testing::Test

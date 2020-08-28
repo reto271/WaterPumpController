@@ -1,5 +1,7 @@
 #include "PumpController.hpp"
 
+#include <stdio.h>
+
 #include "IIOHandler.hpp"
 #include "ITimerMgr.hpp"
 
@@ -40,17 +42,20 @@ void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);
     m_pumpState = PumpState::On;
+    printf("onEnterState_On\n");
 }
 
 void PumpController::onEnterState_Off()
 {
     m_pumpState = PumpState::Off;
+    printf("onEnterState_Off\n");
 }
 
 void PumpController::onEnterState_OffTimeout()
 {
     m_timerId = m_pTimerMgr->createTimer(MIN_PUMP_IDLE_TIME);
     m_pumpState = PumpState::OffTimeout;
+    printf("onEnterState_OffTimeout\n");
 }
 
 void PumpController::state_On()

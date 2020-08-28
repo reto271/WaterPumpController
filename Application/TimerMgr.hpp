@@ -1,14 +1,13 @@
-#ifndef __TIMERMGR_HPP__
-#define __TIMERMGR_HPP__
+#pragma once
 
-#include <stm32f0xx_hal.h>
 #include <stdint.h>
 
 #include "ITimerMgr.hpp"
+#include "BCD_Time.hpp"
 
 class TimerMgr : public ITimerMgr {
 public:
-    TimerMgr(UART_HandleTypeDef* huart1);
+    TimerMgr();
     virtual ~TimerMgr();
 
     void timerISR() override;
@@ -24,6 +23,7 @@ public:
     bool isTimerExpired(const uint32_t timerId) override;
 
     uint32_t getCurrentTime() override;
+    BCD_Time* getBCD_Time() override;
 
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 
@@ -38,6 +38,7 @@ private:
     uint32_t m_periodCounter100ms;
 
     uint32_t m_currentTime;
+    BCD_Time m_bcdTime;
 
     typedef struct {
         uint32_t timerId;
@@ -47,8 +48,4 @@ private:
 
     uint32_t m_nextFreeTimerId;
     TimerData m_activeTimer[MAX_CURRENT_ACTIVE_TIMERS];
-
-    UART_HandleTypeDef* m_pUART;
 };
-
-#endif // __TIMERMGR_HPP__

@@ -4,10 +4,12 @@
 
 #include "IIOHandler.hpp"
 #include "ITimerMgr.hpp"
+#include "IDebugWriter.hpp"
 
-PumpController::PumpController(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr)
+PumpController::PumpController(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr, IDebugWriter* pDebugWriter)
     : m_pIOHandler(pIOHandler)
     , m_pTimerMgr(pTimerMgr)
+    , m_pDebugWriter(pDebugWriter)
     , m_pumpState(PumpState::Off)
     , m_timerId(ITimerMgr::INVALID_TIMER_ID)
 {
@@ -42,20 +44,20 @@ void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);
     m_pumpState = PumpState::On;
-    printf("onEnterState_On\n");
+    m_pDebugWriter->print("onEnterState_On", 15, m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_Off()
 {
     m_pumpState = PumpState::Off;
-    printf("onEnterState_Off\n");
+    m_pDebugWriter->print("onEnterState_Off", 16, m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_OffTimeout()
 {
     m_timerId = m_pTimerMgr->createTimer(MIN_PUMP_IDLE_TIME);
     m_pumpState = PumpState::OffTimeout;
-    printf("onEnterState_OffTimeout\n");
+    m_pDebugWriter->print("onEnterState_OffTimeout", 23, m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::state_On()

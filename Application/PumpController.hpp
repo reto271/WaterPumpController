@@ -4,10 +4,11 @@
 
 class IIOHandler;
 class ITimerMgr;
+class IDebugWriter;
 
 class PumpController {
 public:
-    PumpController(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr);
+    PumpController(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr, IDebugWriter* pDebugWriter);
     virtual ~PumpController();
 
     void run();
@@ -31,6 +32,7 @@ private:
 
     IIOHandler* m_pIOHandler;
     ITimerMgr* m_pTimerMgr;
+    IDebugWriter* m_pDebugWriter;
 
     PumpState m_pumpState;
     uint32_t m_timerId;

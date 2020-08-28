@@ -100,12 +100,13 @@ int main(void)
     MX_TIM14_Init();
 
     /* USER CODE BEGIN 2 */
+
     // Switch off pump & LED as soon as possible
     HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_OUT_GPIO_Port, LED_OUT_Pin, GPIO_PIN_SET);
 
     // Initialize BGL
-    initializeBackgroundLoop();
+    initializeBackgroundLoop(&huart1);
     HAL_TIM_Base_Start_IT(&htim14);
     /* USER CODE END 2 */
 
@@ -176,9 +177,9 @@ static void MX_TIM14_Init(void)
 
     /* USER CODE END TIM14_Init 1 */
     htim14.Instance = TIM14;
-    htim14.Init.Prescaler = 48;
+    htim14.Init.Prescaler = 480;
     htim14.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim14.Init.Period = 200;
+    htim14.Init.Period = 1000;
     htim14.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim14.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
     if(HAL_TIM_Base_Init(&htim14) != HAL_OK) {

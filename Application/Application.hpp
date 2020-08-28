@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
-void initializeBackgroundLoop();
+#include <stm32f0xx_hal.h>
+
+void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl);
 void ApplicationTimerInterrupt10ms();
 void runBackgroudLoop();
 

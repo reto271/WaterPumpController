@@ -3,20 +3,22 @@
 #include "stm32f0xx_hal.h"
 #include "main.h"
 
+#include "DebugWriter.hpp"
 #include "TimerMgr.hpp"
 #include "IOHandler.hpp"
 #include "PumpController.hpp"
 
+static DebugWriter* pDbgWriter = NULL;
 static TimerMgr* pTimerMgr = NULL;
 static IOHandler* pIoHandler = NULL;
 static PumpController* pPumpCtrl = NULL;
 
-
-void initializeBackgroundLoop()
+void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
 {
     pTimerMgr = new TimerMgr();
+    pDbgWriter = new DebugWriter(pUART_Hdl, pTimerMgr);
     pIoHandler = new IOHandler();
-    pPumpCtrl = new PumpController(pIoHandler, pTimerMgr);
+    pPumpCtrl = new PumpController(pIoHandler, pTimerMgr, pDbgWriter);
 }
 
 void ApplicationTimerInterrupt10ms()

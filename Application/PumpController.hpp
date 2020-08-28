@@ -35,6 +35,6 @@ private:
     PumpState m_pumpState;
     uint32_t m_timerId;
 
-    static const uint32_t MAX_PUMP_RUN_TIME = 120;  // s, namely 2min
-    static const uint32_t MIN_PUMP_IDLE_TIME = 3600;  // s, namely 1h
+    static const uint32_t MAX_PUMP_RUN_TIME = 10 * 60;  // s, namely 10min
+    static const uint32_t MIN_PUMP_IDLE_TIME = 24* 3600;  // s, namely 24h
 };

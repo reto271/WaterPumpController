@@ -1,4 +1,7 @@
 #include "TimerMgr.hpp"
+
+#include <stdio.h>
+
 #if defined(_UNIT_TESTS_)
 #include <iostream>
 #endif
@@ -41,6 +44,7 @@ void TimerMgr::timerISR()
         if(10 <= m_periodCounter100ms) {
             m_periodCounter100ms = 0;
             m_currentTime++;
+            m_bcdTime.incrementSecond();
         }
         m_periodCounter100ms++;
     }
@@ -110,17 +114,22 @@ bool TimerMgr::isTimerExpired(const uint32_t timerId)
     return false;
 }
 
+uint32_t TimerMgr::getCurrentTime()
+{
+    return m_currentTime;
+}
+
+BCD_Time* TimerMgr::getBCD_Time()
+{
+    return &m_bcdTime;
+}
+
 void TimerMgr::incrementTimerId()
 {
     m_nextFreeTimerId++;
     if(INVALID_TIMER_ID == m_nextFreeTimerId) {
         m_nextFreeTimerId++;
     }
-}
-
-uint32_t TimerMgr::getCurrentTime()
-{
-    return m_currentTime;
 }
 
 bool TimerMgr::freePositionInArray(uint32_t& freePos)

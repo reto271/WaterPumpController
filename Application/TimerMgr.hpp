@@ -1,9 +1,9 @@
-#ifndef __TIMERMGR_HPP__
-#define __TIMERMGR_HPP__
+#pragma once
 
 #include <stdint.h>
 
 #include "ITimerMgr.hpp"
+#include "BCD_Time.hpp"
 
 class TimerMgr : public ITimerMgr {
 public:
@@ -22,11 +22,13 @@ public:
     void cancelTimer(const uint32_t timerId) override;
     bool isTimerExpired(const uint32_t timerId) override;
 
+    uint32_t getCurrentTime() override;
+    BCD_Time* getBCD_Time() override;
+
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 
 protected:
     void incrementTimerId();
-    uint32_t getCurrentTime();
     bool freePositionInArray(uint32_t& freePos);
 
 private:
@@ -36,6 +38,7 @@ private:
     uint32_t m_periodCounter100ms;
 
     uint32_t m_currentTime;
+    BCD_Time m_bcdTime;
 
     typedef struct {
         uint32_t timerId;
@@ -45,7 +48,4 @@ private:
 
     uint32_t m_nextFreeTimerId;
     TimerData m_activeTimer[MAX_CURRENT_ACTIVE_TIMERS];
-
 };
-
-#endif // __TIMERMGR_HPP__

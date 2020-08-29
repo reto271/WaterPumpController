@@ -1,22 +1,31 @@
+
 #include "Application.hpp"
 
 #include "stm32f0xx_hal.h"
 #include "main.h"
 
+#include "DebugWriter.hpp"
 #include "TimerMgr.hpp"
 #include "IOHandler.hpp"
 #include "PumpController.hpp"
 
+static DebugWriter* pDbgWriter = NULL;
 static TimerMgr* pTimerMgr = NULL;
 static IOHandler* pIoHandler = NULL;
 static PumpController* pPumpCtrl = NULL;
 
-
-void initializeBackgroundLoop()
+void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
 {
     pTimerMgr = new TimerMgr();
+    pDbgWriter = new DebugWriter(pUART_Hdl, pTimerMgr);
     pIoHandler = new IOHandler();
-    pPumpCtrl = new PumpController(pIoHandler, pTimerMgr);
+    pPumpCtrl = new PumpController(pIoHandler, pTimerMgr, pDbgWriter);
+
+    pDbgWriter->print(" ", 1);
+    pDbgWriter->print("Water Pump Controller", 21);
+    //pDbgWriter->print("V01.03 B01", 10);
+    pDbgWriter->print("V01.03", 6);
+    pDbgWriter->print("---", 3);
 }
 
 void ApplicationTimerInterrupt10ms()

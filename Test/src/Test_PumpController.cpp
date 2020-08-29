@@ -5,7 +5,8 @@
 #include "Application/PumpController.hpp"
 #include "Application/IIOHandler.hpp"
 #include "Application/ITimerMgr.hpp"
-
+#include "Application/BCD_Time.hpp"
+#include "Application/IDebugWriter.hpp"
 
 /// Time defined in PumpController.hpp
 const uint32_t TEST_MAX_PUMP_RUN_TIME = 10 * 60;
@@ -16,6 +17,7 @@ const uint32_t TEST_MIN_PUMP_IDLE_TIME = 24 * 3600;
 namespace
 {
 using ::testing::StrictMock;
+using ::testing::NiceMock;
 using ::testing::Return;
 // using ::testing::Exactly;
 using ::testing::AtMost;
@@ -66,6 +68,20 @@ public:
     MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
     MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));
     MOCK_METHOD(bool, isTimerExpired, (const uint32_t), (override));
+
+    MOCK_METHOD(uint32_t, getCurrentTime, (), (override));
+    MOCK_METHOD(BCD_Time*, getBCD_Time, (), (override));
+};
+
+class MockDebugWriter : public IDebugWriter
+{
+public:
+    virtual ~MockDebugWriter()
+    {
+    }
+
+    MOCK_METHOD(bool, print, (char const*, uint8_t), (override));
+    MOCK_METHOD(bool, print, (char const*, uint8_t, BCD_Time*), (override));
 };
 
 class Test_PumpController : public testing::Test
@@ -74,7 +90,10 @@ protected:
     void SetUp() override
     {
         // srand(time(NULL));
-        m_pPumpCtrl = std::make_shared<PumpController>(&mockIOHdl, &mockTimerMgr);
+        m_pPumpCtrl = std::make_shared<PumpController>(&mockIOHdl, &mockTimerMgr, &mockDbgWriter);
+        m_testTime.sec[0] = 1;
+        m_testTime.sec[1] = 2;
+        m_testTime.sec[2] = 4;
     }
 
     void TearDown() override
@@ -83,9 +102,10 @@ protected:
 
     StrictMock<MockIOHandler> mockIOHdl;
     StrictMock<MockTimerMgr> mockTimerMgr;
+    NiceMock<MockDebugWriter> mockDbgWriter;
     std::shared_ptr<PumpController> m_pPumpCtrl;
+    BCD_Time m_testTime;
 };
-
 
 
 TEST_F(Test_PumpController, expectOffAtInitialization)
@@ -113,6 +133,7 @@ TEST_F(Test_PumpController, pumpOn)
     EXPECT_CALL(mockIOHdl, setPumpState(true)).Times(1);
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(1);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(1));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
 }
 
@@ -128,6 +149,7 @@ TEST_F(Test_PumpController, switchOnLaterOffByLevel)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(3);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
     EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(2).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
@@ -170,6 +192,7 @@ TEST_F(Test_PumpController, switchOnLaterOffByTimeout)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(3);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
     EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(2).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
@@ -214,6 +237,7 @@ TEST_F(Test_PumpController, switchOnOfftestIdleTimeout)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(1);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
 //    EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(4).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
 
     // Upper level signal no longer true

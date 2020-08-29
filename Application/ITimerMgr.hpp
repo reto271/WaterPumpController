@@ -2,6 +2,8 @@
 
 #include <stdint.h>
 
+class BCD_Time;
+
 class ITimerMgr {
 public:
     virtual void timerISR() = 0;
@@ -15,6 +17,9 @@ public:
     virtual uint32_t createTimer(const uint32_t timeoutInSec) = 0;
     virtual void cancelTimer(const uint32_t timerId) = 0;
     virtual bool isTimerExpired(const uint32_t timerId) = 0;
+
+    virtual uint32_t getCurrentTime() = 0;
+    virtual BCD_Time* getBCD_Time() = 0;
 
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 };

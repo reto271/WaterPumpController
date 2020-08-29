@@ -1,3 +1,4 @@
+
 #include "Application.hpp"
 
 #include "stm32f0xx_hal.h"
@@ -19,6 +20,11 @@ void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
     pDbgWriter = new DebugWriter(pUART_Hdl, pTimerMgr);
     pIoHandler = new IOHandler();
     pPumpCtrl = new PumpController(pIoHandler, pTimerMgr, pDbgWriter);
+
+    pDbgWriter->print(" ", 1);
+    pDbgWriter->print("Water Pump Controller", 21);
+    pDbgWriter->print("V01.03 B01", 6);
+    pDbgWriter->print("---", 3);
 }
 
 void ApplicationTimerInterrupt10ms()

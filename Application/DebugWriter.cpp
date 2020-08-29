@@ -6,6 +6,8 @@
 
 #include "TimerMgr.hpp"
 
+static uint8_t CRLF[3] = "\r\n";
+
 DebugWriter::DebugWriter(UART_HandleTypeDef* pUART_Hdl, ITimerMgr* pTimerMgr)
     : m_pUART_Hdl(pUART_Hdl)
     , m_pTimerMgr(pTimerMgr)
@@ -22,9 +24,8 @@ bool DebugWriter::print(char const* pData, uint8_t len)
 #if defined(_UNIT_TESTS_)
         std::cout << "Data length: " << static_cast<uint16_t>(len) << " : '" << pData << "'" << std::endl;
 #else
-        uint8_t CR = '\r';
         HAL_UART_Transmit(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), len, 100);
-        HAL_UART_Transmit(m_pUART_Hdl, &CR, 1, 100);
+        HAL_UART_Transmit(m_pUART_Hdl, CRLF, 2, 100);
 #endif
         return true;
     } else {
@@ -41,7 +42,6 @@ bool DebugWriter::print(char const* pData, uint8_t len, BCD_Time* pBCD_Time)
         }
         std::cout << " : " << pData << std::endl;
 #else
-        uint8_t CR = '\r';
         uint8_t separator[] = " : ";
         uint8_t val;
         for(int8_t cnt = BCD_Time::NR_DIGITS - 1; cnt >= 0; cnt--) {
@@ -50,7 +50,7 @@ bool DebugWriter::print(char const* pData, uint8_t len, BCD_Time* pBCD_Time)
         }
         HAL_UART_Transmit(m_pUART_Hdl, separator, 3, 100);
         HAL_UART_Transmit(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), len, 100);
-        HAL_UART_Transmit(m_pUART_Hdl, &CR, 1, 100);
+        HAL_UART_Transmit(m_pUART_Hdl, CRLF, 2, 100);
 #endif
         return true;
     } else {

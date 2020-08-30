@@ -26,13 +26,13 @@ void PeriodicDump::run()
     uint32_t time = m_pTimerMgr->getCurrentTime();
 
     if((0xffff & time) == 0xffff) {
-        m_pDebugWriter->print("alive", 15, m_pTimerMgr->getBCD_Time());
-        if(true == m_pIOHandler->getLevelHigh()) {
+        m_pDebugWriter->print("alive", 5, m_pTimerMgr->getBCD_Time());
+        if(true == m_pIOHandler->getLevelLow()) {
             m_pDebugWriter->print("   Low: on", 10);
         } else {
             m_pDebugWriter->print("   Low: off", 11);
         }
-        if(true == m_pIOHandler->getLevelLow()) {
+        if(true == m_pIOHandler->getLevelHigh()) {
             m_pDebugWriter->print("   High: on", 11);
         } else {
             m_pDebugWriter->print("   High: off", 12);

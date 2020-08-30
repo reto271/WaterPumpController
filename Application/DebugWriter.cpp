@@ -6,7 +6,9 @@
 
 #include "TimerMgr.hpp"
 
+#if !defined(_UNIT_TESTS_)
 static uint8_t CRLF[3] = "\r\n";
+#endif
 
 DebugWriter::DebugWriter(UART_HandleTypeDef* pUART_Hdl, ITimerMgr* pTimerMgr)
     : m_pUART_Hdl(pUART_Hdl)

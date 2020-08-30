@@ -4,8 +4,8 @@
 
 class BCD_Time;
 
-/// \brief Very primitiv replacement for the stdio printf implementation.
-/// There is very little FLASH memory on the used uP. The persisten memory
+/// \brief Very primitive replacement for the stdio printf implementation.
+/// There is very little FLASH memory on the used uP. The persistent memory
 ///  is not sufficiently large to link stdio lib. This class implements a
 ///  very simple and slim printf implementation
 /// \remark The characters are printed in busy waiting.

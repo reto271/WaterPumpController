@@ -25,18 +25,6 @@ using ::testing::AtMost;
 // using ::testing::HasSubstr;
 
 
-#if 0
-virtual WaxType GetPreferredWax(int) const = 0;
-MOCK_METHOD1(GetPreferredWax, WaxType(int));
-
-virtual void run() = 0;
-
-virtual bool getLevelLow() = 0;
-virtual bool getLevelHigh() = 0;
-virtual void setPumpState(bool pumpOn) = 0;
-
-#endif
-
 class MockIOHandler : public IIOHandler
 {
 public:
@@ -64,6 +52,9 @@ public:
 
     MOCK_METHOD(bool, is100ms, (), (override));
     MOCK_METHOD(void, confirm100ms, (), (override));
+
+    MOCK_METHOD(bool, is1s, (), (override));
+    MOCK_METHOD(void, confirm1s, (), (override));
 
     MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
     MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));

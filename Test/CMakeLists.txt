@@ -19,6 +19,7 @@ add_executable(Test_WaterPumpController
                src/Test_DebugWriter.cpp
                src/Test_InputSignal.cpp
                src/Test_IOHandler.cpp
+               src/Test_PeriodicDump.cpp
                src/Test_PumpController.cpp
                src/Test_TimerMgr.cpp
                ../Application/BCD_Time.cpp
@@ -26,6 +27,7 @@ add_executable(Test_WaterPumpController
                ../Application/InputSignal.cpp
                ../Application/IOHandler.cpp
                ../Application/PumpController.cpp
+               ../Application/PeriodicDump.cpp
                ../Application/TimerMgr.cpp)
 
 target_link_libraries(Test_WaterPumpController gtest_main gtest gmock)

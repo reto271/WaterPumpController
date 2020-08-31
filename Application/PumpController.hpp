@@ -53,18 +53,24 @@ private:
     /// IO handler, timer manager and debug writer
     PumpController();
 
+
     /// Enters the state on and starts the maximum run-time timer.
     void onEnterState_On();
+
     /// Enters the state off.
     void onEnterState_Off();
+
     /// Enters the state off-timeout and starts the minimum idle timer.
     void onEnterState_OffTimeout();
+
 
     /// Checks if both levels get off, to switch of the pump and checks
     ///  the maximum run-time timer.
     void state_On();
+
     /// Pump is off, wait until both levels get on.
     void state_Off();
+
     /// Idle timer is running, wait until is expired to eventually switch on again.
     void state_OffTimeout();
 

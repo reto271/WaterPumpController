@@ -17,6 +17,7 @@ public:
     /// \param[in] len length of the buffer to be printed.
     /// \return true if the buffer is printed, false if printing is rejected.
     virtual bool print(char const* pData, uint8_t len) = 0;
+
     /// Prints a given text with a given length.
     /// \param[in] pData string to be printed, no necessary 0 terminated.
     /// \param[in] len length of the buffer to be printed.

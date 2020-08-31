@@ -21,23 +21,29 @@ public:
     ///  every 10ms
     virtual void timerISR() = 0;
 
+
     /// Returns true if 10ms interval is due to be processed.
     /// \return true if 10ms expired
     virtual bool is10ms() = 0;
+
     /// Confirms that the 10ms interval is processed. Shall be called such that it is
     ///  not processed multiple times.
     virtual void confirm10ms() = 0;
 
+
     /// Returns true if 100ms interval is due to be processed.
     /// \return true if 100ms expired
     virtual bool is100ms() = 0;
+
     /// Confirms that the 100ms interval is processed. Shall be called such that it is
     ///  not processed multiple times.
     virtual void confirm100ms() = 0;
 
+
     /// Returns true if 1s interval is due to be processed.
     /// \return true if 1s expired
     virtual bool is1s() = 0;
+
     /// Confirms that the 1s interval is processed. Shall be called such that it is
     ///  not processed multiple times.
     virtual void confirm1s() = 0;

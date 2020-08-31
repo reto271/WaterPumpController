@@ -6,6 +6,12 @@ class IIOHandler;
 class ITimerMgr;
 class IDebugWriter;
 
+/// Core functionality of the 'Water Pump Controller' software. It reads the inputs and
+///  sets the states of the pump.
+///
+/// @startuml
+/// [*] --> OFF
+/// @enduml
 class PumpController {
 public:
     PumpController(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr, IDebugWriter* pDebugWriter);

@@ -7,6 +7,11 @@ cd ..
 
 ./scripts/showSW_Version.sh
 
+mkdir -p tmp
+if [ ! -f tmp/plantuml.jar ] ; then
+    wget http://sourceforge.net/projects/plantuml/files/plantuml.jar/download -O tmp/plantuml.jar
+fi
+
 # Remove the old docu
 rm -rf docu
 mkdir -p docu

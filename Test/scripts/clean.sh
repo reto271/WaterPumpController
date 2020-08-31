@@ -15,7 +15,6 @@ if [ 1 -eq $# ] ; then
     fi
 fi
 
-rm -rf docu
 find -name "*~" -exec rm -f {} \;
 rm -rf bin
 

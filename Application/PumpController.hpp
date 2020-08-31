@@ -40,10 +40,13 @@ public:
 private:
     /// States of the pump controller
     enum class PumpState {
-        On,         /// Pump state is on, maximum run time timer is on.
-        Off,        /// Pump state is off, it is ready to switch on.
-        OffTimeout, /// Pump state is off, the min idle timer is still running.
-                    //// The pump remains off independent of the level detection.
+        /// Pump state is on, maximum run time timer is on.
+        On,
+        /// Pump state is off, it is ready to switch on.
+        Off,
+        /// Pump state is off, the min idle timer is still running. The pump remains off
+        ///  independent of the level detection.
+        OffTimeout,
     };
 
     /// The pump controller shall not be created without the necessary references to

@@ -15,9 +15,9 @@
 const uint32_t TimerMgr::INVALID_TIMER_ID;  // Initialized in the header, necessary for the linker
 
 TimerMgr::TimerMgr()
-    : m_exe10msIntervall(false)
-    , m_exe100msIntervall(false)
-    , m_exe1sIntervall(false)
+    : m_exe10msInterval(false)
+    , m_exe100msInterval(false)
+    , m_exe1sInterval(false)
     , m_periodCounter10ms(1)
     , m_periodCounter100ms(1)
     , m_currentTime(0)
@@ -36,17 +36,17 @@ TimerMgr::~TimerMgr()
 void TimerMgr::timerISR()
 {
     // Check that the previous interval was properly handled.
-//    assert(false === m_exe10msIntervall);
-    m_exe10msIntervall = true;
+//    assert(false === m_exe10msInterval);
+    m_exe10msInterval = true;
     if(10 <= m_periodCounter10ms) {
         m_periodCounter10ms = 0;
-//        assert(false === m_exe100msIntervall);
-        m_exe100msIntervall = true;
+//        assert(false === m_exe100msInterval);
+        m_exe100msInterval = true;
         if(10 <= m_periodCounter100ms) {
             m_periodCounter100ms = 0;
             m_currentTime++;
             m_bcdTime.incrementSecond();
-            m_exe1sIntervall = true;
+            m_exe1sInterval = true;
         }
         m_periodCounter100ms++;
     }
@@ -55,32 +55,32 @@ void TimerMgr::timerISR()
 
 bool TimerMgr::is10ms()
 {
-    return m_exe10msIntervall;
+    return m_exe10msInterval;
 }
 
 void TimerMgr::confirm10ms()
 {
-    m_exe10msIntervall = false;
+    m_exe10msInterval = false;
 }
 
 bool TimerMgr::is100ms()
 {
-    return m_exe100msIntervall;
+    return m_exe100msInterval;
 }
 
 void TimerMgr::confirm100ms()
 {
-    m_exe100msIntervall = false;
+    m_exe100msInterval = false;
 }
 
 bool TimerMgr::is1s()
 {
-    return m_exe1sIntervall;
+    return m_exe1sInterval;
 }
 
 void TimerMgr::confirm1s()
 {
-    m_exe1sIntervall = false;
+    m_exe1sInterval = false;
 }
 
 uint32_t TimerMgr::createTimer(const uint32_t timeoutInSec)

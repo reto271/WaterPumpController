@@ -34,8 +34,9 @@
 # Exclude temp and binary directories
 tmp/
 Debug/
-Test/googletest
-Test/bin
+Test/googletest/
+Test/bin/
+docu/
 
 # Exclude global/gtag files
 GPATH

@@ -14,6 +14,8 @@ SCRIPTDIR=$(readlink -f $(dirname "$0"))
 pushd "${SCRIPTDIR}" > /dev/null
 cd ..
 
+./scripts/showSW_Version.sh
+
 feedback=0
 
 echo "Clean Tests"

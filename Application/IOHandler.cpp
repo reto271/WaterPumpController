@@ -1,11 +1,5 @@
 #include "IOHandler.hpp"
 
-// #if !defined(_UNIT_TESTS_)
-// #include "main.h"
-// #else
-// #include "../Test/src/Test_IOHandler.hpp"
-// #endif
-
 IOHandler::IOHandler()
     : m_levelLow(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin, false, false)
     , m_levelHigh(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin, false, false)

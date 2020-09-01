@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 #include "Application/DebugWriter.hpp"
-#include "Application/ITimerMgr.hpp"
 #include "Application/BCD_Time.hpp"
 
 #include "Mock_TimerMgr.hpp"

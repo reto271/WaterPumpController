@@ -22,6 +22,8 @@ public:
 
     void run() override;
 
+    void setPumpController(PumpController* pPumpCtrl) override;
+
 protected:
     /// Reference to the IO handler, to get input states
     IIOHandler* m_pIOHandler;
@@ -31,4 +33,9 @@ protected:
 
     /// Reference to the debug writer, to dump the data
     IDebugWriter* m_pDebugWriter;
+
+    /// Reference to the pump controller
+    /// \remark Not set a construction time, use setPumpController and check if it is not null
+    ///          before using it.
+    PumpController* m_pPumpCtrl;
 };

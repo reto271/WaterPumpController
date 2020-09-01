@@ -19,6 +19,7 @@ using ::testing::AtMost;
 // using ::testing::_;
 // using ::testing::HasSubstr;
 
+
 class Test_PeriodicDump : public testing::Test
 {
 protected:
@@ -57,6 +58,7 @@ TEST_F(Test_PeriodicDump, DumpTimeAndState)
     EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&currentTimeBCD));
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(1)).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockIOHdl, getPumpState()).Times(AtMost(1)).WillRepeatedly(Return(false));
     m_pPumpCtrl->run();
 }
 

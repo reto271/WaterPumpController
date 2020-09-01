@@ -23,6 +23,10 @@ public:
     /// \param[in] pumpOn: if set true the pump is switched on.
     virtual void setPumpState(bool pumpOn) = 0;
 
+    /// Returns the current state of the pump
+    /// \return true if the pump is running
+    virtual bool getPumpState() = 0;
+
     /// Switches the LED on the CPU board.
     /// \param[in] LED_On: if set true the LED is switched on.
     virtual void setLED_State(bool LED_On) = 0;

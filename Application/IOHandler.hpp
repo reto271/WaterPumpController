@@ -23,6 +23,7 @@ public:
     bool getLevelLow() override;
     bool getLevelHigh() override;
     void setPumpState(bool pumpOn) override;
+    bool getPumpState() override;
     void setLED_State(bool LED_On) override;
 
 protected:
@@ -31,4 +32,7 @@ protected:
 
     /// Input signal to detect the higher water level (switch on the pump).
     InputSignal m_levelHigh;
+
+    /// State of the pump
+    bool m_isPumpOn;
 };

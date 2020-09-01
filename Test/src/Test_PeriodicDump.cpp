@@ -30,6 +30,7 @@ public:
     MOCK_METHOD(bool, getLevelLow, (), (override));
     MOCK_METHOD(bool, getLevelHigh, (), (override));
     MOCK_METHOD(void, setPumpState, (bool), (override));
+    MOCK_METHOD(bool, getPumpState, (), (override));
     MOCK_METHOD(void, setLED_State, (bool), (override));
 };
 
@@ -107,6 +108,7 @@ TEST_F(Test_PeriodicDump, DumpTimeAndState)
     EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&currentTimeBCD));
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(1)).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockIOHdl, getPumpState()).Times(AtMost(1)).WillRepeatedly(Return(false));
     m_pPumpCtrl->run();
 }
 

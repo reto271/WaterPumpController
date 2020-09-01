@@ -8,6 +8,7 @@
 #include "Application/IDebugWriter.hpp"
 
 #include "Mock_TimerMgr.hpp"
+#include "Mock_IOHandler.hpp"
 
 namespace
 {
@@ -18,21 +19,6 @@ using ::testing::Return;
 using ::testing::AtMost;
 // using ::testing::_;
 // using ::testing::HasSubstr;
-
-
-class MockIOHandler : public IIOHandler
-{
-public:
-    virtual ~MockIOHandler()
-    {
-    }
-
-    MOCK_METHOD(void, run, (), (override));
-    MOCK_METHOD(bool, getLevelLow, (), (override));
-    MOCK_METHOD(bool, getLevelHigh, (), (override));
-    MOCK_METHOD(void, setPumpState, (bool), (override));
-    MOCK_METHOD(void, setLED_State, (bool), (override));
-};
 
 class MockDebugWriter : public IDebugWriter
 {

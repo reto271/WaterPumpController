@@ -8,7 +8,6 @@
 
 #include "Mock_TimerMgr.hpp"
 
-
 namespace
 {
 using ::testing::StrictMock;

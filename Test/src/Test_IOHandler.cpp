@@ -72,6 +72,11 @@ TEST_F(Test_IOHandler, instance)
     IOHandler ioHdl;
 }
 
+TEST_F(Test_IOHandler, DISABLED_testsToDo)
+{
+    IOHandler ioHdl;
+}
+
 // TEST_F(Test_IOHandler, initializationOrder)
 // {
 //     // Initialize arrays

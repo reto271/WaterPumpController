@@ -21,7 +21,7 @@ TimerMgr::TimerMgr()
     , m_periodCounter10ms(1)
     , m_periodCounter100ms(1)
     , m_currentTime(0)
-    , m_nextFreeTimerId(0)
+    , m_lastAssignedTimerId(0)
 {
     for(uint32_t cnt = 0; cnt < MAX_CURRENT_ACTIVE_TIMERS; cnt++) {
         m_activeTimer[cnt].timerId = INVALID_TIMER_ID;
@@ -85,17 +85,15 @@ void TimerMgr::confirm1s()
 
 uint32_t TimerMgr::createTimer(const uint32_t timeoutInSec)
 {
-    uint32_t newTimerId = m_nextFreeTimerId;
+    uint32_t newTimerId = getAvailableTimerId();
     uint32_t newTimerPos = INVALID_TIMER_ID;
     if(true == freePositionInArray(newTimerPos)) {
-        // assert(INVALID_TIMER_ID == m_activeTimer[m_nextFreeTimerId].timerId);
         m_activeTimer[newTimerPos].timerId = newTimerId;
         m_activeTimer[newTimerPos].timeItExpires = m_currentTime + timeoutInSec;
 #if defined(_UNIT_TESTS_)
         // std::cout << "CreateTimer, currentTime: " << m_currentTime << ", newId: " << newTimerId <<
         //    ", expireTime: " << m_activeTimer[newTimerPos].timeItExpires << std::endl;
 #endif
-        incrementTimerId();
         return newTimerId;
     } else {
         return INVALID_TIMER_ID;
@@ -136,12 +134,26 @@ BCD_Time* TimerMgr::getBCD_Time()
     return &m_bcdTime;
 }
 
-void TimerMgr::incrementTimerId()
+uint32_t TimerMgr::getAvailableTimerId()
 {
-    m_nextFreeTimerId++;
-    if(INVALID_TIMER_ID == m_nextFreeTimerId) {
-        m_nextFreeTimerId++;
-    }
+    bool idFound;
+    do {
+        idFound = true;
+        m_lastAssignedTimerId++;
+
+        // Care about the wrap-around
+        if(INVALID_TIMER_ID == m_lastAssignedTimerId) {
+            m_lastAssignedTimerId = 0;
+        }
+
+        // Is the ID in use?
+        for(uint32_t cnt = 0; cnt < MAX_CURRENT_ACTIVE_TIMERS; cnt++) {
+            if(m_lastAssignedTimerId == m_activeTimer[cnt].timerId) {
+                idFound = false;
+            }
+        }
+    } while(false == idFound);
+    return m_lastAssignedTimerId;
 }
 
 bool TimerMgr::freePositionInArray(uint32_t& freePos)
@@ -156,4 +168,9 @@ bool TimerMgr::freePositionInArray(uint32_t& freePos)
         }
     }
     return false;
+}
+
+void TimerMgr::setLastAssignedId(uint32_t id)
+{
+    m_lastAssignedTimerId = id;
 }

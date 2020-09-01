@@ -44,13 +44,27 @@ public:
     static const uint32_t INVALID_TIMER_ID = UINT32_MAX;
 
 protected:
-    /// Increments the timer ID. The function cares about the wrapping.
-    void incrementTimerId();
+    /// Returns the next available timer Id. It cares about the wrap
+    ///  and whether the ID is already in use.
+    /// \return available timer ID
+    uint32_t getAvailableTimerId();
 
     /// Returns a free position in the timer array.
     /// \param[out] freePos in the timer array.
     /// \returns false if all timers are in use.
     bool freePositionInArray(uint32_t& freePos);
+
+
+
+#if defined (_UNIT_TESTS_)
+protected:
+#else
+private:
+#endif
+    /// Function is for testing only.
+    /// Sets the ID do check that an ID in use is not taken again.
+    /// \param[in] id used the create the last timer
+    void setLastAssignedId(uint32_t id);
 
 private:
     /// True if the 10ms interval timer is ready to be processed.
@@ -88,8 +102,8 @@ private:
     /// Maximum number of concurrently active timers
     static const uint32_t MAX_CURRENT_ACTIVE_TIMERS = 10;
 
-    /// Next free timer ID
-    uint32_t m_nextFreeTimerId;
+    /// Last assigned timer ID, base to evaluate the next available ID.
+    uint32_t m_lastAssignedTimerId;
 
     /// Array of timers. Entries not in use will have timerId equal to INVALID_TIMER_ID
     TimerData m_activeTimer[MAX_CURRENT_ACTIVE_TIMERS];

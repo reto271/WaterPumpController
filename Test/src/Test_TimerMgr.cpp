@@ -102,7 +102,7 @@ TEST_F(Test_TimerMgr, singleTimer)
     EXPECT_EQ(3, this->getCurrentTime());
 
     myTimerId = this->createTimer(4);
-    EXPECT_EQ(0, myTimerId);
+    EXPECT_EQ(1, myTimerId);
 
     for(uint32_t cnt = 0; cnt < 399; cnt++) {
         this->timerISR();
@@ -126,7 +126,7 @@ TEST_F(Test_TimerMgr, cancelTimer)
     EXPECT_EQ(3, this->getCurrentTime());
 
     myTimerId = this->createTimer(4);
-    EXPECT_EQ(0, myTimerId);
+    EXPECT_EQ(1, myTimerId);
 
     for(uint32_t cnt = 0; cnt < 399; cnt++) {
         this->timerISR();
@@ -159,9 +159,9 @@ TEST_F(Test_TimerMgr, multipleTimers)
     myTimerId_2 = this->createTimer(2);
     myTimerId_3 = this->createTimer(4);
 
-    EXPECT_EQ(0, myTimerId_1);
-    EXPECT_EQ(1, myTimerId_2);
-    EXPECT_EQ(2, myTimerId_3);
+    EXPECT_EQ(1, myTimerId_1);
+    EXPECT_EQ(2, myTimerId_2);
+    EXPECT_EQ(3, myTimerId_3);
 
     for(uint32_t cnt = 0; cnt < 99; cnt++) {
         this->timerISR();
@@ -208,8 +208,6 @@ TEST_F(Test_TimerMgr, multipleTimers)
 
 TEST_F(Test_TimerMgr, tooManyTimers)
 {
-
-    EXPECT_EQ(0, this->createTimer(1));
     EXPECT_EQ(1, this->createTimer(1));
     EXPECT_EQ(2, this->createTimer(1));
     EXPECT_EQ(3, this->createTimer(1));
@@ -219,14 +217,13 @@ TEST_F(Test_TimerMgr, tooManyTimers)
     EXPECT_EQ(7, this->createTimer(1));
     EXPECT_EQ(8, this->createTimer(1));
     EXPECT_EQ(9, this->createTimer(1));
+    EXPECT_EQ(10, this->createTimer(1));
     EXPECT_EQ(INVALID_TIMER_ID, this->createTimer(1));
 }
 
 
 TEST_F(Test_TimerMgr, reuseOfTimers)
 {
-
-    EXPECT_EQ(0, this->createTimer(2));
     EXPECT_EQ(1, this->createTimer(2));
     EXPECT_EQ(2, this->createTimer(2));
     EXPECT_EQ(3, this->createTimer(2));
@@ -236,6 +233,7 @@ TEST_F(Test_TimerMgr, reuseOfTimers)
     EXPECT_EQ(7, this->createTimer(2));
     EXPECT_EQ(8, this->createTimer(2));
     EXPECT_EQ(9, this->createTimer(2));
+    EXPECT_EQ(10, this->createTimer(2));
 
     for(uint32_t cnt = 0; cnt < 99; cnt++) {
         this->timerISR();
@@ -260,7 +258,7 @@ TEST_F(Test_TimerMgr, reuseOfTimers)
     EXPECT_FALSE(this->isTimerExpired(10));
 
     // Create timer a the location timer 5 did expire
-    EXPECT_EQ(10, this->createTimer(1));
+    EXPECT_EQ(11, this->createTimer(1));
     // Now there is no longer space
     EXPECT_EQ(INVALID_TIMER_ID, this->createTimer(1));
 }
@@ -270,6 +268,30 @@ TEST_F(Test_TimerMgr, isTimerExpiredNonExistingId)
     EXPECT_FALSE(this->isTimerExpired(0));
     EXPECT_FALSE(this->isTimerExpired(1234));
     EXPECT_FALSE(this->isTimerExpired(TimerMgr::INVALID_TIMER_ID));
+}
+
+TEST_F(Test_TimerMgr, doNotUseIdOfActiveTimer)
+{
+    // Do not let this timer expire, respectively do not cancel
+    EXPECT_EQ(1, this->createTimer(2));
+
+    this->setLastAssignedId(0);
+
+    // Id 0 and 1 shall not be used, the next free is 2.
+    EXPECT_EQ(2, this->createTimer(2));
+}
+
+TEST_F(Test_TimerMgr, checkTimerIdWrap)
+{
+    this->setLastAssignedId(UINT32_MAX - 3);
+    // Do not let this timer expire, respectively do not cancel
+    EXPECT_EQ(UINT32_MAX - 2, this->createTimer(2));
+
+    // Wrap did not yet occure, the hightest available ID shall be returned
+    EXPECT_EQ(UINT32_MAX - 1, this->createTimer(2));
+
+    // Wrap occured, UINT32_MAX is not used.
+    EXPECT_EQ(0, this->createTimer(2));
 }
 
 }  // unnamed namespace

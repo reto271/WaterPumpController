@@ -3,12 +3,11 @@
 #include <stdint.h>
 
 #include "Application/PeriodicDump.hpp"
-#include "Application/IIOHandler.hpp"
 #include "Application/BCD_Time.hpp"
-#include "Application/IDebugWriter.hpp"
 
 #include "Mock_TimerMgr.hpp"
 #include "Mock_IOHandler.hpp"
+#include "Mock_DebugWriter.hpp"
 
 namespace
 {
@@ -19,17 +18,6 @@ using ::testing::Return;
 using ::testing::AtMost;
 // using ::testing::_;
 // using ::testing::HasSubstr;
-
-class MockDebugWriter : public IDebugWriter
-{
-public:
-    virtual ~MockDebugWriter()
-    {
-    }
-
-    MOCK_METHOD(bool, print, (char const*, uint8_t), (override));
-    MOCK_METHOD(bool, print, (char const*, uint8_t, BCD_Time*), (override));
-};
 
 class Test_PeriodicDump : public testing::Test
 {

@@ -40,6 +40,24 @@ void PumpController::run()
     m_pIOHandler->setLED_State(PumpState::On == m_pumpState);
 }
 
+void PumpController::dumpState()
+{
+    switch(m_pumpState) {
+        case PumpState::On:
+            m_pDebugWriter->print("   State: on", 12);
+            break;
+
+        case PumpState::OffTimeout:
+            m_pDebugWriter->print("   State: offTimeout", 20);
+            break;
+
+        default:
+        case PumpState::Off:
+            m_pDebugWriter->print("   State: off", 13);
+            break;
+    }
+}
+
 void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);

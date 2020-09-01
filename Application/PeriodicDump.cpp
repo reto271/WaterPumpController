@@ -3,17 +3,13 @@
 #include "TimerMgr.hpp"
 #include "DebugWriter.hpp"
 #include "IOHandler.hpp"
-
-// #if !defined(_UNIT_TESTS_)
-// #include "main.h"
-// #else
-// #include "../Test/src/Test_PeriodicDump.hpp"
-// #endif
+#include "PumpController.hpp"
 
 PeriodicDump::PeriodicDump(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr, IDebugWriter* pDebugWriter)
     : m_pIOHandler(pIOHandler)
     , m_pTimerMgr(pTimerMgr)
     , m_pDebugWriter(pDebugWriter)
+    , m_pPumpCtrl(nullptr)
 {
 }
 
@@ -42,5 +38,14 @@ void PeriodicDump::run()
         } else {
             m_pDebugWriter->print("   Pump: off", 12);
         }
+        // Is the only pointer not set at construction time
+        if(nullptr != m_pPumpCtrl) {
+            m_pPumpCtrl->dumpState();
+        }
     }
+}
+
+void PeriodicDump::setPumpController(PumpController* pPumpCtrl)
+{
+    m_pPumpCtrl = pPumpCtrl;
 }

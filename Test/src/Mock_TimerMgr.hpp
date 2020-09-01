@@ -1,22 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <stdint.h>
 
-//#include "Application/DebugWriter.hpp"
 #include "Application/ITimerMgr.hpp"
-//#include "Application/BCD_Time.hpp"
-
-
-
-//- namespace
-//- {
-//- using ::testing::StrictMock;
-//- using ::testing::NiceMock;
-//- // using ::testing::Return;
-//- // using ::testing::Exactly;
-//- using ::testing::AtMost;
-//- // using ::testing::_;
-//- // using ::testing::HasSubstr;
 
 class MockTimerMgr : public ITimerMgr
 {

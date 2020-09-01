@@ -59,6 +59,9 @@ static void MX_TIM14_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/// Callback registered to be call in case of interrupt. Check the interrupt data
+///  and kick the application if timer 14 did trigger the interrupt
+/// \param[in] htim handle of the timer inteterrupts
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
 {
     if(htim->Instance == TIM14) {
@@ -98,7 +101,6 @@ int main(void)
     MX_GPIO_Init();
     MX_USART1_UART_Init();
     MX_TIM14_Init();
-
     /* USER CODE BEGIN 2 */
 
     // Switch off pump & LED as soon as possible

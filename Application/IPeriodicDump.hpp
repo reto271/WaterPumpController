@@ -13,5 +13,6 @@ public:
     virtual void run() = 0;
 
     /// Set reference to the pump controller, used to dump its state.
+    /// \param[in] pPumpCtrl reference to the pump controller.
     virtual void setPumpController(PumpController* pPumpCtrl) = 0;
 };

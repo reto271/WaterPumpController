@@ -8,6 +8,8 @@
 #include "Application/BCD_Time.hpp"
 #include "Application/IDebugWriter.hpp"
 
+#include "Mock_TimerMgr.hpp"
+
 /// Time defined in PumpController.hpp
 const uint32_t TEST_MAX_PUMP_RUN_TIME = 10 * 60;
 
@@ -37,31 +39,6 @@ public:
     MOCK_METHOD(bool, getLevelHigh, (), (override));
     MOCK_METHOD(void, setPumpState, (bool), (override));
     MOCK_METHOD(void, setLED_State, (bool), (override));
-};
-
-class MockTimerMgr : public ITimerMgr
-{
-public:
-    virtual ~MockTimerMgr()
-    {
-    }
-
-    MOCK_METHOD(void, timerISR, (), (override));
-    MOCK_METHOD(bool, is10ms, (), (override));
-    MOCK_METHOD(void, confirm10ms, (), (override));
-
-    MOCK_METHOD(bool, is100ms, (), (override));
-    MOCK_METHOD(void, confirm100ms, (), (override));
-
-    MOCK_METHOD(bool, is1s, (), (override));
-    MOCK_METHOD(void, confirm1s, (), (override));
-
-    MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
-    MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));
-    MOCK_METHOD(bool, isTimerExpired, (const uint32_t), (override));
-
-    MOCK_METHOD(uint32_t, getCurrentTime, (), (override));
-    MOCK_METHOD(BCD_Time*, getBCD_Time, (), (override));
 };
 
 class MockDebugWriter : public IDebugWriter

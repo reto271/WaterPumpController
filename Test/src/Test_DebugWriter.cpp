@@ -6,11 +6,8 @@
 #include "Application/ITimerMgr.hpp"
 #include "Application/BCD_Time.hpp"
 
+#include "Mock_TimerMgr.hpp"
 
-// GPIO_PinState HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
-// {
-//     return GPIO_PIN_RESET;
-// }
 
 namespace
 {
@@ -21,31 +18,6 @@ using ::testing::NiceMock;
 using ::testing::AtMost;
 // using ::testing::_;
 // using ::testing::HasSubstr;
-
-class MockTimerMgr : public ITimerMgr
-{
-public:
-    virtual ~MockTimerMgr()
-    {
-    }
-
-    MOCK_METHOD(void, timerISR, (), (override));
-    MOCK_METHOD(bool, is10ms, (), (override));
-    MOCK_METHOD(void, confirm10ms, (), (override));
-
-    MOCK_METHOD(bool, is100ms, (), (override));
-    MOCK_METHOD(void, confirm100ms, (), (override));
-
-    MOCK_METHOD(bool, is1s, (), (override));
-    MOCK_METHOD(void, confirm1s, (), (override));
-
-    MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
-    MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));
-    MOCK_METHOD(bool, isTimerExpired, (const uint32_t), (override));
-
-    MOCK_METHOD(uint32_t, getCurrentTime, (), (override));
-    MOCK_METHOD(BCD_Time*, getBCD_Time, (), (override));
-};
 
 class Test_DebugWriter : public testing::Test
 {

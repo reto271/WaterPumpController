@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 #include "Application/TimerMgr.hpp"
-// #include "Application/ITimerMgr.hpp"
 
 namespace
 {
@@ -13,32 +12,6 @@ using ::testing::Return;
 // using ::testing::_;
 // using ::testing::HasSubstr;
 
-
-#if 0
-virtual WaxType GetPreferredWax(int) const = 0;
-MOCK_METHOD1(GetPreferredWax, WaxType(int));
-
-virtual void run() = 0;
-
-virtual bool getLevelLow() = 0;
-virtual bool getLevelHigh() = 0;
-virtual void setPumpState(bool pumpOn) = 0;
-
-#endif
-
-// class MockTimerMgr : public ITimerMgr
-// {
-// public:
-//    virtual ~MockTimerMgr()
-//    {
-//    }
-//
-//    MOCK_METHOD(void, run, (), (override));
-//    MOCK_METHOD(bool, getLevelLow, (), (override));
-//    MOCK_METHOD(bool, getLevelHigh, (), (override));
-//    MOCK_METHOD(void, setPumpState, (bool), (override));
-//    MOCK_METHOD(void, setLED_State, (bool), (override));
-// };
 
 class Test_TimerMgr : public testing::Test, public TimerMgr
 {

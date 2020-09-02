@@ -10,6 +10,7 @@ PeriodicDump::PeriodicDump(IIOHandler* pIOHandler, ITimerMgr* pTimerMgr, IDebugW
     , m_pTimerMgr(pTimerMgr)
     , m_pDebugWriter(pDebugWriter)
     , m_pPumpCtrl(nullptr)
+    , m_startup(true)
 {
 }
 
@@ -21,7 +22,8 @@ void PeriodicDump::run()
 {
     uint32_t time = m_pTimerMgr->getCurrentTime();
 
-    if((0x7fff & time) == 0x7fff) {
+    if(((0x3fff & time) == 0) || (true == m_startup)) {
+        m_startup = false;
         m_pDebugWriter->print("alive", 5, m_pTimerMgr->getBCD_Time());
         if(true == m_pIOHandler->getLevelLow()) {
             m_pDebugWriter->print("   Low: on", 10);

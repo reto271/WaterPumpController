@@ -38,4 +38,7 @@ protected:
     /// \remark Not set a construction time, use setPumpController and check if it is not null
     ///          before using it.
     PumpController* m_pPumpCtrl;
+
+    /// True at startup, will be reset at the first run. To dump the info at startup.
+    bool m_startup;
 };

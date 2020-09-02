@@ -3,6 +3,7 @@
 IOHandler::IOHandler()
     : m_levelLow(LEVEL_1_IN_GPIO_Port, LEVEL_1_IN_Pin, false, false)
     , m_levelHigh(LEVEL_1_IN_GPIO_Port, LEVEL_2_IN_Pin, false, false)
+    , m_isPumpOn(false)
 {
 }
 
@@ -35,6 +36,12 @@ void IOHandler::setPumpState(bool pumpOn)
         HAL_GPIO_WritePin(PUMP_OUT_GPIO_Port, PUMP_OUT_Pin, GPIO_PIN_RESET);
     }
  #endif
+    m_isPumpOn = pumpOn;
+}
+
+bool IOHandler::getPumpState()
+{
+    return m_isPumpOn;
 }
 
 void IOHandler::setLED_State(bool LED_On)

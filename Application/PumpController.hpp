@@ -37,6 +37,9 @@ public:
     /// \remark Shall be called every 100ms
     void run();
 
+    /// Dumps internal state information
+    void dumpState();
+
 private:
     /// States of the pump controller
     enum class PumpState {

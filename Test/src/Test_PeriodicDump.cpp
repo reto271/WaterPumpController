@@ -3,10 +3,11 @@
 #include <stdint.h>
 
 #include "Application/PeriodicDump.hpp"
-#include "Application/IIOHandler.hpp"
-#include "Application/ITimerMgr.hpp"
 #include "Application/BCD_Time.hpp"
-#include "Application/IDebugWriter.hpp"
+
+#include "Mock_TimerMgr.hpp"
+#include "Mock_IOHandler.hpp"
+#include "Mock_DebugWriter.hpp"
 
 namespace
 {
@@ -18,56 +19,6 @@ using ::testing::AtMost;
 // using ::testing::_;
 // using ::testing::HasSubstr;
 
-
-class MockIOHandler : public IIOHandler
-{
-public:
-    virtual ~MockIOHandler()
-    {
-    }
-
-    MOCK_METHOD(void, run, (), (override));
-    MOCK_METHOD(bool, getLevelLow, (), (override));
-    MOCK_METHOD(bool, getLevelHigh, (), (override));
-    MOCK_METHOD(void, setPumpState, (bool), (override));
-    MOCK_METHOD(void, setLED_State, (bool), (override));
-};
-
-class MockTimerMgr : public ITimerMgr
-{
-public:
-    virtual ~MockTimerMgr()
-    {
-    }
-
-    MOCK_METHOD(void, timerISR, (), (override));
-    MOCK_METHOD(bool, is10ms, (), (override));
-    MOCK_METHOD(void, confirm10ms, (), (override));
-
-    MOCK_METHOD(bool, is100ms, (), (override));
-    MOCK_METHOD(void, confirm100ms, (), (override));
-
-    MOCK_METHOD(bool, is1s, (), (override));
-    MOCK_METHOD(void, confirm1s, (), (override));
-
-    MOCK_METHOD(uint32_t, createTimer, (const uint32_t), (override));
-    MOCK_METHOD(void, cancelTimer, (const uint32_t), (override));
-    MOCK_METHOD(bool, isTimerExpired, (const uint32_t), (override));
-
-    MOCK_METHOD(uint32_t, getCurrentTime, (), (override));
-    MOCK_METHOD(BCD_Time*, getBCD_Time, (), (override));
-};
-
-class MockDebugWriter : public IDebugWriter
-{
-public:
-    virtual ~MockDebugWriter()
-    {
-    }
-
-    MOCK_METHOD(bool, print, (char const*, uint8_t), (override));
-    MOCK_METHOD(bool, print, (char const*, uint8_t, BCD_Time*), (override));
-};
 
 class Test_PeriodicDump : public testing::Test
 {
@@ -107,6 +58,7 @@ TEST_F(Test_PeriodicDump, DumpTimeAndState)
     EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&currentTimeBCD));
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(1)).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockIOHdl, getPumpState()).Times(AtMost(1)).WillRepeatedly(Return(false));
     m_pPumpCtrl->run();
 }
 

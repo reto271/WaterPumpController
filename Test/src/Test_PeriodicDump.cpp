@@ -26,7 +26,7 @@ protected:
     void SetUp() override
     {
         // srand(time(NULL));
-        m_pPumpCtrl = std::make_shared<PeriodicDump>(&mockIOHdl, &mockTimerMgr, &mockDbgWriter);
+        m_pPeriodicDump = std::make_shared<PeriodicDump>(&mockIOHdl, &mockTimerMgr, &mockDbgWriter);
         // m_testTime.sec[0] = 1;
         // m_testTime.sec[1] = 2;
         // m_testTime.sec[2] = 4;
@@ -39,15 +39,24 @@ protected:
     StrictMock<MockIOHandler> mockIOHdl;
     StrictMock<MockTimerMgr> mockTimerMgr;
     NiceMock<MockDebugWriter> mockDbgWriter;
-    std::shared_ptr<PeriodicDump> m_pPumpCtrl;
+    std::shared_ptr<PeriodicDump> m_pPeriodicDump;
 //    BCD_Time m_testTime;
 };
 
 
 TEST_F(Test_PeriodicDump, notAtDumpTime)
 {
+    BCD_Time currentTimeBCD;
+    currentTimeBCD.sec[2] = 2;
+
     EXPECT_CALL(mockTimerMgr, getCurrentTime()).Times(1).WillRepeatedly(Return(1234));
-    m_pPumpCtrl->run();
+
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&currentTimeBCD));
+    EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(1)).WillRepeatedly(Return(false));
+    EXPECT_CALL(mockIOHdl, getPumpState()).Times(AtMost(1)).WillRepeatedly(Return(false));
+
+    m_pPeriodicDump->run();
 }
 
 TEST_F(Test_PeriodicDump, DumpTimeAndState)
@@ -59,7 +68,7 @@ TEST_F(Test_PeriodicDump, DumpTimeAndState)
     EXPECT_CALL(mockIOHdl, getLevelLow()).Times(1).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getLevelHigh()).Times(AtMost(1)).WillRepeatedly(Return(false));
     EXPECT_CALL(mockIOHdl, getPumpState()).Times(AtMost(1)).WillRepeatedly(Return(false));
-    m_pPumpCtrl->run();
+    m_pPeriodicDump->run();
 }
 
 }  // unnamed namespace

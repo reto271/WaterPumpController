@@ -27,8 +27,8 @@ void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
 
     pDbgWriter->print(" ", 1);
     pDbgWriter->print("Water Pump Controller", 21);
-    pDbgWriter->print("V01.09 B03", 10);
-    // pDbgWriter->print("V01.08", 6);
+    // pDbgWriter->print("V01.09 B03", 10);
+    pDbgWriter->print("V01.09", 6);
     pDbgWriter->print("---", 3);
 }
 

@@ -24,21 +24,21 @@ void PeriodicDump::run()
 
     if(((0x3ffff & time) == 0) || (true == m_startup)) {
         m_startup = false;
-        m_pDebugWriter->print("alive", 5, m_pTimerMgr->getBCD_Time());
+        m_pDebugWriter->print("alive", m_pTimerMgr->getBCD_Time());
         if(true == m_pIOHandler->getLevelLow()) {
-            m_pDebugWriter->print("   Low: on", 10);
+            m_pDebugWriter->print("           Low: on");
         } else {
-            m_pDebugWriter->print("   Low: off", 11);
+            m_pDebugWriter->print("           Low: off");
         }
         if(true == m_pIOHandler->getLevelHigh()) {
-            m_pDebugWriter->print("   High: on", 11);
+            m_pDebugWriter->print("           High: on");
         } else {
-            m_pDebugWriter->print("   High: off", 12);
+            m_pDebugWriter->print("           High: off");
         }
         if(true == m_pIOHandler->getPumpState()) {
-            m_pDebugWriter->print("   Pump: on", 11);
+            m_pDebugWriter->print("           Pump: on");
         } else {
-            m_pDebugWriter->print("   Pump: off", 12);
+            m_pDebugWriter->print("           Pump: off");
         }
         // Is the only pointer not set at construction time
         if(nullptr != m_pPumpCtrl) {

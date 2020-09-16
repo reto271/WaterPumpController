@@ -28,10 +28,17 @@ public:
     /// Destructor
     virtual ~DebugWriter();
 
-    bool print(char const* pData, uint8_t len) override;
-    bool print(char const* pData, uint8_t len, BCD_Time* pBCD_Time) override;
+    void print(char const* pData) override;
+    void print(char const* pData, BCD_Time* pBCD_Time) override;
 
 private:
+    /// Determines the string length, but returns at most MAX_STRING_LENGTH.
+    /// \return bounded string lenght
+    uint8_t getStringLen(char const* pData);
+
+    /// Maximum string length processed by the DebugWriter
+    static const uint8_t MAX_STRING_LENGTH = 50;
+
     /// Handle to the UART. (STM lib)
     UART_HandleTypeDef* m_pUART_Hdl;
 

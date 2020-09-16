@@ -39,14 +39,14 @@ protected:
 TEST_F(Test_DebugWriter, simplePrint)
 {
 
-    m_pDebugWriter->print("hello", 5);
+    m_pDebugWriter->print("hello");
 }
 
 TEST_F(Test_DebugWriter, printWithTime)
 {
     BCD_Time bcdTime;
     bcdTime.sec[3] = 3;
-    m_pDebugWriter->print("hello", 5, &bcdTime);
+    m_pDebugWriter->print("hello", &bcdTime);
 }
 
 

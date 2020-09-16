@@ -25,11 +25,11 @@ void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
 
     pPeriodicDump->setPumpController(pPumpCtrl);
 
-    pDbgWriter->print(" ", 1);
-    pDbgWriter->print("Water Pump Controller", 21);
-    pDbgWriter->print("V01.10 B01", 10);
-    /// pDbgWriter->print("V01.09", 6);
-    pDbgWriter->print("---", 3);
+    pDbgWriter->print(" ");
+    pDbgWriter->print("Water Pump Controller");
+    pDbgWriter->print("V01.10 B02");
+    /// pDbgWriter->print("V01.09");
+    pDbgWriter->print("---");
 }
 
 void ApplicationTimerInterrupt10ms()

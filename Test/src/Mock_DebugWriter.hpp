@@ -12,6 +12,6 @@ public:
     {
     }
 
-    MOCK_METHOD(bool, print, (char const*, uint8_t), (override));
-    MOCK_METHOD(bool, print, (char const*, uint8_t, BCD_Time*), (override));
+    MOCK_METHOD(void, print, (char const*), (override));
+    MOCK_METHOD(void, print, (char const*, BCD_Time*), (override));
 };

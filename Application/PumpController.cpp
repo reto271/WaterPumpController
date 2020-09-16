@@ -44,16 +44,16 @@ void PumpController::dumpState()
 {
     switch(m_pumpState) {
         case PumpState::On:
-            m_pDebugWriter->print("   State: on", 12);
+            m_pDebugWriter->print("           State: on");
             break;
 
         case PumpState::OffTimeout:
-            m_pDebugWriter->print("   State: offTimeout", 20);
+            m_pDebugWriter->print("           State: offTimeout");
             break;
 
         default:
         case PumpState::Off:
-            m_pDebugWriter->print("   State: off", 13);
+            m_pDebugWriter->print("           State: off");
             break;
     }
 }
@@ -62,20 +62,20 @@ void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);
     m_pumpState = PumpState::On;
-    m_pDebugWriter->print("onEnterState_On", 15, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_On", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_Off()
 {
     m_pumpState = PumpState::Off;
-    m_pDebugWriter->print("onEnterState_Off", 16, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_Off", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_OffTimeout()
 {
     m_timerId = m_pTimerMgr->createTimer(MIN_PUMP_IDLE_TIME);
     m_pumpState = PumpState::OffTimeout;
-    m_pDebugWriter->print("onEnterState_OffTimeout", 23, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_OffTimeout", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::state_On()

@@ -33,6 +33,7 @@ public:
 
 private:
     /// Determines the string length, but returns at most MAX_STRING_LENGTH.
+    /// \param[in] pData string to determine its length.
     /// \return bounded string lenght
     uint8_t getStringLen(char const* pData);
 

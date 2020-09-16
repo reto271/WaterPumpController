@@ -15,7 +15,7 @@ static TimerMgr* m_pTimerMgr = NULL;
 static IOHandler* m_pIoHandler = NULL;
 static PeriodicDump* m_pPeriodicDump = NULL;
 static PumpController* m_pPumpCtrl = NULL;
-// static CommandInterpreter* m_pCmdInter = NULL;
+static CommandInterpreter* m_pCmdInter = NULL;
 
 void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
 {
@@ -24,13 +24,13 @@ void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
     m_pIoHandler = new IOHandler();
     m_pPeriodicDump = new PeriodicDump(m_pIoHandler, m_pTimerMgr, m_pDbgWriter);
     m_pPumpCtrl = new PumpController(m_pIoHandler, m_pTimerMgr, m_pDbgWriter);
-    // m_pCmdInter = new CommandInterpreter(pUART_Hdl);
+    m_pCmdInter = new CommandInterpreter(pUART_Hdl);
 
     m_pPeriodicDump->setPumpController(m_pPumpCtrl);
 
     m_pDbgWriter->print(" ");
     m_pDbgWriter->print("Water Pump Controller");
-    m_pDbgWriter->print("V01.10 B04");
+    m_pDbgWriter->print("V01.10 B05");
     /// m_pDbgWriter->print("V01.09");
     m_pDbgWriter->print("---");
 }
@@ -54,4 +54,6 @@ void runBackgroudLoop()
         m_pTimerMgr->confirm1s();
         m_pPeriodicDump->run();
     }
+    // Poll UART, check if there are commands from the terminal
+    m_pCmdInter->pollUART();
 }

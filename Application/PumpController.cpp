@@ -83,10 +83,12 @@ void PumpController::state_On()
     if((false == m_pIOHandler->getLevelLow()) && (false == m_pIOHandler->getLevelHigh())) {
         m_pTimerMgr->cancelTimer(m_timerId);
         m_timerId = ITimerMgr::INVALID_TIMER_ID;
+        m_pDebugWriter->print("Lower level reached", 19, m_pTimerMgr->getBCD_Time());
         onEnterState_OffTimeout();
     } else {
         if(true == m_pTimerMgr->isTimerExpired(m_timerId)) {
             m_timerId = ITimerMgr::INVALID_TIMER_ID;
+            m_pDebugWriter->print("On timer expired", 16, m_pTimerMgr->getBCD_Time());
             onEnterState_OffTimeout();
         }
     }
@@ -95,6 +97,7 @@ void PumpController::state_On()
 void PumpController::state_Off()
 {
     if((true == m_pIOHandler->getLevelLow()) && (true == m_pIOHandler->getLevelHigh())) {
+        m_pDebugWriter->print("Both level on", 14, m_pTimerMgr->getBCD_Time());
         onEnterState_On();
     }
 }
@@ -103,6 +106,7 @@ void PumpController::state_OffTimeout()
 {
     if(true == m_pTimerMgr->isTimerExpired(m_timerId)) {
         m_timerId = ITimerMgr::INVALID_TIMER_ID;
+        m_pDebugWriter->print("Off timer expired", 17, m_pTimerMgr->getBCD_Time());
         onEnterState_Off();
     }
 }

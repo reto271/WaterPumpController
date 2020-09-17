@@ -22,7 +22,8 @@ void PeriodicDump::run()
 {
     uint32_t time = m_pTimerMgr->getCurrentTime();
 
-    if(((0xf & time) == 0) || (true == m_startup)) {
+    // 0x7ffff = 6.06 days
+    if(((0xfffff & time) == 0) || (true == m_startup)) {
         m_startup = false;
         dumpInfo();
     }

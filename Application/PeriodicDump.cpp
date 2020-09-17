@@ -22,29 +22,36 @@ void PeriodicDump::run()
 {
     uint32_t time = m_pTimerMgr->getCurrentTime();
 
-    if(((0x3ffff & time) == 0) || (true == m_startup)) {
+    // 0x7ffff = 6.06 days
+    if(((0xfffff & time) == 0) || (true == m_startup)) {
         m_startup = false;
-        m_pDebugWriter->print("alive", m_pTimerMgr->getBCD_Time());
-        if(true == m_pIOHandler->getLevelLow()) {
-            m_pDebugWriter->print("           Low: on");
-        } else {
-            m_pDebugWriter->print("           Low: off");
-        }
-        if(true == m_pIOHandler->getLevelHigh()) {
-            m_pDebugWriter->print("           High: on");
-        } else {
-            m_pDebugWriter->print("           High: off");
-        }
-        if(true == m_pIOHandler->getPumpState()) {
-            m_pDebugWriter->print("           Pump: on");
-        } else {
-            m_pDebugWriter->print("           Pump: off");
-        }
-        // Is the only pointer not set at construction time
-        if(nullptr != m_pPumpCtrl) {
-            m_pPumpCtrl->dumpState();
-        }
+        dumpInfo();
     }
+}
+
+void PeriodicDump::dumpInfo()
+{
+    m_pDebugWriter->print("alive", m_pTimerMgr->getBCD_Time());
+    if(true == m_pIOHandler->getLevelLow()) {
+        m_pDebugWriter->print("           Low: on");
+    } else {
+        m_pDebugWriter->print("           Low: off");
+    }
+    if(true == m_pIOHandler->getLevelHigh()) {
+        m_pDebugWriter->print("           High: on");
+    } else {
+        m_pDebugWriter->print("           High: off");
+    }
+    if(true == m_pIOHandler->getPumpState()) {
+        m_pDebugWriter->print("           Pump: on");
+    } else {
+        m_pDebugWriter->print("           Pump: off");
+    }
+    // Is the only pointer not set at construction time
+    if(nullptr != m_pPumpCtrl) {
+        m_pPumpCtrl->dumpState();
+    }
+
 }
 
 void PeriodicDump::setPumpController(PumpController* pPumpCtrl)

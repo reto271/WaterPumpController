@@ -21,7 +21,7 @@ public:
     virtual ~PeriodicDump();
 
     void run() override;
-
+    void dumpInfo() override;
     void setPumpController(PumpController* pPumpCtrl) override;
 
 protected:

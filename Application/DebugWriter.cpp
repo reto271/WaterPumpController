@@ -5,6 +5,7 @@
 #endif
 
 #include "TimerMgr.hpp"
+#include "UART_miniDriver.hpp"
 
 #if !defined(_UNIT_TESTS_)
 static uint8_t CRLF[3] = "\r\n";
@@ -26,8 +27,8 @@ void DebugWriter::print(char const* pData)
 #if defined(_UNIT_TESTS_)
     std::cout << "Data length: " << static_cast<uint16_t>(len) << " : '" << pData << "'" << std::endl;
 #else
-    HAL_UART_Transmit(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), len, 100);
-    HAL_UART_Transmit(m_pUART_Hdl, CRLF, 2, 100);
+    HAL_UART_Transmit_rdu(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), len);
+    HAL_UART_Transmit_rdu(m_pUART_Hdl, CRLF, 2);
 #endif
 }
 
@@ -43,11 +44,11 @@ void DebugWriter::print(char const* pData, BCD_Time* pBCD_Time)
     uint8_t val;
     for(int8_t cnt = BCD_Time::NR_DIGITS - 1; cnt >= 0; cnt--) {
         val = static_cast<uint8_t>(pBCD_Time->sec[cnt] + 0x30);
-        HAL_UART_Transmit(m_pUART_Hdl, &val, 1, 100);
+        HAL_UART_Transmit_rdu(m_pUART_Hdl, &val, 1);
     }
-    HAL_UART_Transmit(m_pUART_Hdl, separator, 3, 100);
-    HAL_UART_Transmit(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), getStringLen(pData), 100);
-    HAL_UART_Transmit(m_pUART_Hdl, CRLF, 2, 100);
+    HAL_UART_Transmit_rdu(m_pUART_Hdl, separator, 3);
+    HAL_UART_Transmit_rdu(m_pUART_Hdl, reinterpret_cast<uint8_t*>(const_cast<char*>(pData)), getStringLen(pData));
+    HAL_UART_Transmit_rdu(m_pUART_Hdl, CRLF, 2);
 #endif
 }
 

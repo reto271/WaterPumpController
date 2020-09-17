@@ -1,4 +1,3 @@
-#if 0
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <stdint.h>
@@ -20,18 +19,21 @@ protected:
     void SetUp() override
     {
         // srand(time(NULL));
+        // m_pCmdInter = std::make_shared<CommandInterpreter>(mockUART_Hdl)
     }
 
     void TearDown() override
     {
     }
 
-//    StrictMock<MockCommandInterpreter> mockIOHdl;
+    UART_HandleTypeDef mockUART_Hdl;
+    // StrictMock<MockPeriodicDump> mockPeriodicDump;
+    std::shared_ptr<CommandInterpreter> m_pCmdInter;
 };
 
 
-TEST_F(Test_CommandInterpreter, construct)
+TEST_F(Test_CommandInterpreter, DISABLED_construct)
 {
-
 }
-#endif
+
+}   // unnamed namespace

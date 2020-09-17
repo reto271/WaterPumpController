@@ -24,13 +24,13 @@ void initializeBackgroundLoop(UART_HandleTypeDef* pUART_Hdl)
     m_pIoHandler = new IOHandler();
     m_pPeriodicDump = new PeriodicDump(m_pIoHandler, m_pTimerMgr, m_pDbgWriter);
     m_pPumpCtrl = new PumpController(m_pIoHandler, m_pTimerMgr, m_pDbgWriter);
-    m_pCmdInter = new CommandInterpreter(pUART_Hdl);
+    m_pCmdInter = new CommandInterpreter(pUART_Hdl, m_pPeriodicDump);
 
     m_pPeriodicDump->setPumpController(m_pPumpCtrl);
 
     m_pDbgWriter->print(" ");
     m_pDbgWriter->print("Water Pump Controller");
-    m_pDbgWriter->print("V01.10 B05");
+    m_pDbgWriter->print("V01.10 B07");
     /// m_pDbgWriter->print("V01.09");
     m_pDbgWriter->print("---");
 }

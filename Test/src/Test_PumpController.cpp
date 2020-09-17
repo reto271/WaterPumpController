@@ -75,7 +75,7 @@ TEST_F(Test_PumpController, pumpOn)
     EXPECT_CALL(mockIOHdl, setPumpState(true)).Times(1);
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(1);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(1));
-    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(1).WillRepeatedly(Return(&m_testTime));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(2).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
 }
 
@@ -91,7 +91,7 @@ TEST_F(Test_PumpController, switchOnLaterOffByLevel)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(3);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
     EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
-    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(2).WillRepeatedly(Return(&m_testTime));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(4).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
@@ -134,7 +134,7 @@ TEST_F(Test_PumpController, switchOnLaterOffByTimeout)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(3);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
     EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
-    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(2).WillRepeatedly(Return(&m_testTime));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(4).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
     m_pPumpCtrl->run();
@@ -179,7 +179,7 @@ TEST_F(Test_PumpController, switchOnOfftestIdleTimeout)
     EXPECT_CALL(mockIOHdl, setLED_State(true)).Times(1);
     EXPECT_CALL(mockTimerMgr, createTimer(TEST_MAX_PUMP_RUN_TIME)).Times(1).WillRepeatedly(Return(TIMER_ID_ON_TIME));
 //    EXPECT_CALL(mockTimerMgr, isTimerExpired(TIMER_ID_ON_TIME)).Times(2).WillRepeatedly(Return(false));
-    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(4).WillRepeatedly(Return(&m_testTime));
+    EXPECT_CALL(mockTimerMgr, getBCD_Time()).Times(8).WillRepeatedly(Return(&m_testTime));
     m_pPumpCtrl->run();
 
     // Upper level signal no longer true

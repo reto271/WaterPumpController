@@ -44,16 +44,16 @@ void PumpController::dumpState()
 {
     switch(m_pumpState) {
         case PumpState::On:
-            m_pDebugWriter->print("   State: on", 12);
+            m_pDebugWriter->print("           State: on");
             break;
 
         case PumpState::OffTimeout:
-            m_pDebugWriter->print("   State: offTimeout", 20);
+            m_pDebugWriter->print("           State: offTimeout");
             break;
 
         default:
         case PumpState::Off:
-            m_pDebugWriter->print("   State: off", 13);
+            m_pDebugWriter->print("           State: off");
             break;
     }
 }
@@ -62,20 +62,20 @@ void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);
     m_pumpState = PumpState::On;
-    m_pDebugWriter->print("onEnterState_On", 15, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_On", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_Off()
 {
     m_pumpState = PumpState::Off;
-    m_pDebugWriter->print("onEnterState_Off", 16, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_Off", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::onEnterState_OffTimeout()
 {
     m_timerId = m_pTimerMgr->createTimer(MIN_PUMP_IDLE_TIME);
     m_pumpState = PumpState::OffTimeout;
-    m_pDebugWriter->print("onEnterState_OffTimeout", 23, m_pTimerMgr->getBCD_Time());
+    m_pDebugWriter->print("onEnterState_OffTimeout", m_pTimerMgr->getBCD_Time());
 }
 
 void PumpController::state_On()
@@ -83,10 +83,12 @@ void PumpController::state_On()
     if((false == m_pIOHandler->getLevelLow()) && (false == m_pIOHandler->getLevelHigh())) {
         m_pTimerMgr->cancelTimer(m_timerId);
         m_timerId = ITimerMgr::INVALID_TIMER_ID;
+        m_pDebugWriter->print("Lower level reached", m_pTimerMgr->getBCD_Time());
         onEnterState_OffTimeout();
     } else {
         if(true == m_pTimerMgr->isTimerExpired(m_timerId)) {
             m_timerId = ITimerMgr::INVALID_TIMER_ID;
+            m_pDebugWriter->print("On timer expired", m_pTimerMgr->getBCD_Time());
             onEnterState_OffTimeout();
         }
     }
@@ -95,6 +97,7 @@ void PumpController::state_On()
 void PumpController::state_Off()
 {
     if((true == m_pIOHandler->getLevelLow()) && (true == m_pIOHandler->getLevelHigh())) {
+        m_pDebugWriter->print("Both level on", m_pTimerMgr->getBCD_Time());
         onEnterState_On();
     }
 }
@@ -103,6 +106,7 @@ void PumpController::state_OffTimeout()
 {
     if(true == m_pTimerMgr->isTimerExpired(m_timerId)) {
         m_timerId = ITimerMgr::INVALID_TIMER_ID;
+        m_pDebugWriter->print("Off timer expired", m_pTimerMgr->getBCD_Time());
         onEnterState_Off();
     }
 }

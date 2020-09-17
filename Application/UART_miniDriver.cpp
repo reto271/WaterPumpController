@@ -24,7 +24,6 @@ HAL_StatusTypeDef HAL_UART_Receive_rdu(UART_HandleTypeDef* huart, uint8_t* pData
     return HAL_OK;
 }
 
-
 /**
  * @brief  Handle UART Communication Timeout.
  * @param huart     UART handle.
@@ -39,7 +38,6 @@ HAL_StatusTypeDef UART_WaitOnFlagUntilTimeout_rdu(UART_HandleTypeDef* huart, uin
     }
     return HAL_OK;
 }
-
 
 /**
  * @brief Send an amount of data in blocking mode.

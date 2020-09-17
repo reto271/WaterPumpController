@@ -58,6 +58,15 @@ void PumpController::dumpState()
     }
 }
 
+void PumpController::printNameAndVersion()
+{
+    m_pDebugWriter->print(" ");
+    m_pDebugWriter->print("Water Pump Controller");
+    m_pDebugWriter->print("V01.11 B02");
+    // m_pDebugWriter->print("V01.10");
+    m_pDebugWriter->print("---");
+}
+
 void PumpController::onEnterState_On()
 {
     m_timerId = m_pTimerMgr->createTimer(MAX_PUMP_RUN_TIME);

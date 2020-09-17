@@ -40,6 +40,9 @@ public:
     /// Dumps internal state information
     void dumpState();
 
+    /// Prints the SW version and name
+    void printNameAndVersion();
+
 private:
     /// States of the pump controller
     enum class PumpState {

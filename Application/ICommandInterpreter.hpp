@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+/// \brief Reads and processes commands
 /// Reads characters from the UART, identifies commands and triggers the defined action.
 class ICommandInterpreter {
 public:

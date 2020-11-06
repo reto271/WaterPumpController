@@ -12,7 +12,8 @@
 
 class IPeriodicDump;
 
-// \brief xxx
+/// \brief Reads and processes commands
+/// Reads characters from the UART, identifies commands and triggers the defined action.
 class CommandInterpreter : public ICommandInterpreter
 {
 public:

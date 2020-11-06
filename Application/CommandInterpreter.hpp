@@ -18,15 +18,21 @@ class CommandInterpreter : public ICommandInterpreter
 public:
     /// Creates the command interpreter.
     /// \param[in] pUART_Hdl handle of the UART driver provided by the STM framework.
+    /// \param[in] pPeriodicDump Used to dump the state on demand. The dump state function is
+    ///             implemented by the periodic dump class.
     CommandInterpreter(UART_HandleTypeDef* pUART_Hdl, IPeriodicDump* pPeriodicDump);
 
     /// Destructs the command interpreter.
     virtual ~CommandInterpreter();
 
+    /// Polls the UART for new data. In case there is a 'd' received the current
+    ///  state is dumped.
     void pollUART() override;
 
 protected:
     /// Handle to the UART, to use the stm32 lib.
     UART_HandleTypeDef* m_pUART_Hdl;
+
+    /// Reference to dump the current state of the application.
     IPeriodicDump* m_pPeriodicDump;
 };

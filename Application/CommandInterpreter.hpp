@@ -25,8 +25,6 @@ public:
     /// Destructs the command interpreter.
     virtual ~CommandInterpreter();
 
-    /// Polls the UART for new data. In case there is a 'd' received the current
-    ///  state is dumped.
     void pollUART() override;
 
 protected:

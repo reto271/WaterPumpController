@@ -63,7 +63,7 @@ void PumpController::printNameAndVersion()
     m_pDebugWriter->print(" ");
     m_pDebugWriter->print("Water Pump Controller");
     // Version number Vxx.yy Bzz or Vxx.yy
-    m_pDebugWriter->print("V01.11");
+    m_pDebugWriter->print("V01.12 B01");
     m_pDebugWriter->print("---");
 }
 
